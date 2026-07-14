@@ -57,7 +57,14 @@ export function SiteFooter() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
           <div>&copy; 2026 NB Business Solutions, Nashik</div>
-          <div>Built for operators, by operators.</div>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+            <Link href="/privacy" className="hover:text-gold transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-gold transition-colors">Terms</Link>
+            <Link href="/refund" className="hover:text-gold transition-colors">Refunds</Link>
+            <Link href="/disclaimer" className="hover:text-gold transition-colors">Disclaimer</Link>
+            <Link href="/intellectual-property" className="hover:text-gold transition-colors">IP</Link>
+            <Link href="/cookies" className="hover:text-gold transition-colors">Cookies</Link>
+          </div>
         </div>
       </div>
     </footer>
