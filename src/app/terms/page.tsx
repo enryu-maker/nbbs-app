@@ -94,7 +94,7 @@ export default function TermsOfServicePage() {
               ],
             },
           ],
-          note: "For questions about your diagnostic or data requests, email: contact.nbbs@gmail.com",
+          note: "For questions about your diagnostic or data requests, email: connect@nbbs.in",
         },
         {
           id: "limitations",
@@ -155,7 +155,7 @@ export default function TermsOfServicePage() {
           id: "contact",
           title: "2.12 Contact",
           paragraphs: [
-            "For questions about these terms: contact.nbbs@gmail.com",
+            "For questions about these terms: connect@nbbs.in",
           ],
         },
       ]}

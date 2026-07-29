@@ -72,7 +72,7 @@ export default function CookiesPolicyPage() {
           id: "contact",
           title: "6.6 Contact",
           paragraphs: [
-            "For questions about cookies and analytics: contact.nbbs@gmail.com",
+            "For questions about cookies and analytics: connect@nbbs.in",
           ],
         },
       ]}

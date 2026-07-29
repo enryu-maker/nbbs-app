@@ -79,7 +79,7 @@ export default function IntellectualPropertyPage() {
           id: "recording",
           title: "5.5 Video/Recording Requests",
           paragraphs: [
-            "If you want to record the workshop for personal use or discuss recording with us, email: contact.nbbs@gmail.com",
+            "If you want to record the workshop for personal use or discuss recording with us, email: connect@nbbs.in",
           ],
         },
       ]}

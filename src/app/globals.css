@@ -131,14 +131,4 @@
     ::selection {
         background-color: color-mix(in oklab, var(--gold) 30%, transparent);
     }
-
-    body:has(.home-splash-only) nav,
-    body:has(.home-splash-only) footer {
-        display: none;
-    }
-
-    body:has(.home-splash-only) main {
-        display: block;
-        flex: initial;
-    }
 }
