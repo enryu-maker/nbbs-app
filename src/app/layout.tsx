@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Prata, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteNav } from "@/components/sites/SiteNav";
-import { SiteFooter } from "@/components/sites/SiteFooter";
 
 const prata = Prata({
   weight: "400",
@@ -47,9 +45,7 @@ export default function RootLayout({
       className={`${prata.variable} ${inter.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <SiteNav />
         <main className="flex-1">{children}</main>
-        <SiteFooter />
       </body>
     </html>
   );

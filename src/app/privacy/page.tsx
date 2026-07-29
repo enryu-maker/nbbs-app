@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
             "Payment records: 7 years (required by tax law)",
             "You can request deletion anytime: We'll delete within 30 days, except where tax law requires retention",
           ],
-          note: "Your Rights: You can request a copy of your diagnostic responses anytime via contact.nbbs@gmail.com. We'll provide them within 7 days.",
+          note: "Your Rights: You can request a copy of your diagnostic responses anytime via connect@nbbs.in. We'll provide them within 7 days.",
         },
         {
           id: "sharing",
@@ -82,7 +82,7 @@ export default function PrivacyPolicyPage() {
             "Deletion: Request deletion of your data (subject to legal retention requirements)",
             "Withdraw consent: Stop receiving non-essential communications",
           ],
-          note: "To exercise these rights, email: contact.nbbs@gmail.com",
+          note: "To exercise these rights, email: connect@nbbs.in",
         },
         {
           id: "security",

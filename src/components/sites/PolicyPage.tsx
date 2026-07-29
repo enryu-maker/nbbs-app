@@ -169,10 +169,10 @@ export function PolicyPage({
             <p className="text-sm text-navy/40 leading-relaxed">
               Questions about this policy?{" "}
               <a
-                href="mailto:contact.nbbs@gmail.com"
+                href="mailto:connect@nbbs.in"
                 className="text-gold hover:underline"
               >
-                contact.nbbs@gmail.com
+                connect@nbbs.in
               </a>
             </p>
           </div>

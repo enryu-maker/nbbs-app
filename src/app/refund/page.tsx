@@ -47,7 +47,7 @@ export default function RefundPolicyPage() {
           id: "how-to-request",
           title: "3.2 How to Request a Refund",
           bullets: [
-            "Email: contact.nbbs@gmail.com with your name, registration email, and reason for cancellation",
+            "Email: connect@nbbs.in with your name, registration email, and reason for cancellation",
             "We'll verify your registration and process the refund within 7 working days",
             "Refunds are issued to your original payment method (Razorpay account)",
           ],
@@ -84,7 +84,7 @@ export default function RefundPolicyPage() {
           id: "disputes",
           title: "3.6 Disputes",
           paragraphs: [
-            "If you believe a refund was incorrectly denied, email contact.nbbs@gmail.com with details. We'll review within 5 working days.",
+            "If you believe a refund was incorrectly denied, email connect@nbbs.in with details. We'll review within 5 working days.",
           ],
         },
       ]}
