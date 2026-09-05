@@ -90,7 +90,7 @@ export default function Home() {
               <div className="flex w-full items-center justify-center md:justify-end">
                 <div className="relative w-[140%] max-w-[1100px] md:-mr-32">
                   <Image
-                    src="/scribble-main.png"
+                    src="/scribble-update.png"
                     alt="From Chaos to Clarity - Business Diagnosis and Solution Implementation"
                     width={2572}
                     height={724}
