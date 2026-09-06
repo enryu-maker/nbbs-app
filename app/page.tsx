@@ -63,7 +63,7 @@ export default function Home() {
 
               {/* DIVIDER */}
               <div
-                className="my-8 h-px w-full bg-[#172039]/20 md:my-4 md:h-full md:min-h-[300px] md:w-px md:self-stretch md:mx-8 lg:mx-12 xl:mx-16"
+                className="my-8 h-px w-full bg-[#172039]/30 md:my-4 md:h-full md:min-h-[300px] md:w-px md:self-stretch md:mx-8 lg:mx-12 xl:mx-16"
                 aria-hidden="true"
               />
 
@@ -98,7 +98,7 @@ export default function Home() {
                 </div>
 
                 {/* META */}
-                <div className="mt-5 flex items-center justify-center gap-2 text-[9px] font-medium tracking-[0.16em] text-[#34415c]/70 sm:text-[10px]">
+                <div className="mt-5 flex items-center justify-center gap-2 text-[9px] font-medium tracking-[0.16em] text-[#c9a86a] sm:text-[10px]">
                   <span>STRATEGY</span>
                   <span>•</span>
                   <span>EXECUTION</span>
