@@ -227,7 +227,7 @@ export default function ContactSection() {
                 {/* Google Map */}
                 <div className="h-52 w-full overflow-hidden sm:h-48 md:h-56">
                   <iframe
-                    src="https://www.google.com/maps?q=8%2C%202nd%20Floor%2C%20Smita%20Apartment%202%20Patil%20Lane%2C%202%2C%20College%20Rd%2C%20opp.%20Magnum%20Hospital%2C%20Nashik%2C%20Maharashtra%20422005%2C%20India&output=embed"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3749.0654999952358!2d73.76646517508881!3d20.005765481399802!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bddebece0e0085b%3A0x723bcd9f9798b5c3!2sNB%20Business%20Solutions!5e0!3m2!1sen!2sin!4v1788694094660!5m2!1sen!2sin"
                     width="100%"
                     height="100%"
                     style={{
@@ -235,8 +235,7 @@ export default function ContactSection() {
                     }}
                     loading="lazy"
                     allowFullScreen
-                    sandbox="allow-scripts allow-popups"
-                    referrerPolicy="no-referrer-when-downgrade"
+                    referrerPolicy="strict-origin-when-cross-origin"
                     title="NB Business Solutions Location"
                   />
                 </div>

@@ -111,7 +111,10 @@ export function normalizeApiError(error: unknown): ApiError {
   return new ApiError('An unexpected error occurred', undefined, error);
 }
 
-export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/+$/, '');
+export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://erp.nbbs.in').replace(
+  /\/+$/,
+  '',
+);
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
