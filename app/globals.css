@@ -1,0 +1,493 @@
+/* app/globals.css */
+
+@import 'tailwindcss';
+
+@theme {
+  /* ============================================================
+     COLOR PALETTE
+  ============================================================ */
+
+  --color-tertiary-fixed: #d8e3fb;
+  --color-on-tertiary: #ffffff;
+  --color-on-primary-fixed-variant: #3f465c;
+  --color-tertiary-fixed-dim: #bcc7de;
+  --color-on-error-container: #93000a;
+  --color-inverse-primary: #bec6e0;
+  --color-on-surface: #1b1b1d;
+  --color-inverse-on-surface: #f3f0f2;
+  --color-tertiary: #000000;
+  --color-on-secondary-container: #fffbff;
+  --color-surface-tint: #565e74;
+  --color-inverse-surface: #303032;
+  --color-on-primary: #ffffff;
+  --color-on-background: #1b1b1d;
+  --color-outline-variant: #c6c6cd;
+  --color-error-container: #ffdad6;
+  --color-secondary-fixed-dim: #c3c0ff;
+  --color-secondary-container: #645efb;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-secondary: #ffffff;
+  --color-secondary-fixed: #e2dfff;
+  --color-on-tertiary-container: #79849a;
+  --color-primary: #0f172a;
+  --color-on-tertiary-fixed: #111c2d;
+  --color-on-primary-container: #7c839b;
+  --color-surface-container-highest: #e4e2e4;
+  --color-surface-container: #f0edef;
+  --color-primary-container: #131b2e;
+  --color-on-tertiary-fixed-variant: #3c475a;
+  --color-secondary: #c5a059;
+  --color-on-surface-variant: #45464d;
+  --color-primary-fixed: #dae2fd;
+  --color-on-primary-fixed: #131b2e;
+  --color-surface-container-high: #eae7e9;
+  --color-on-secondary-fixed-variant: #3323cc;
+  --color-background: #fcf8fa;
+  --color-surface: #fcf8fa;
+  --color-on-error: #ffffff;
+  --color-primary-fixed-dim: #bec6e0;
+  --color-surface-dim: #dcd9db;
+  --color-surface-variant: #e4e2e4;
+  --color-error: #ba1a1a;
+  --color-outline: #76777d;
+  --color-on-secondary-fixed: #0f0069;
+  --color-surface-bright: #fcf8fa;
+  --color-surface-container-low: #f6f3f5;
+  --color-tertiary-container: #111c2d;
+
+  /* ============================================================
+     SPACING
+  ============================================================ */
+
+  --spacing-unit-xl: 48px;
+  --spacing-unit-lg: 24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-unit-xs: 4px;
+  --spacing-margin-mobile: 20px;
+  --spacing-gutter: 24px;
+  --spacing-container-max: 1280px;
+  --spacing-unit-sm: 8px;
+  --spacing-unit-md: 16px;
+
+  /* ============================================================
+     FONTS
+  ============================================================ */
+
+  --font-sans: var(--font-plus-jakarta-sans), sans-serif;
+  --font-display: var(--font-fraunces), serif;
+}
+
+/* ================================================================
+   SCROLL UTILITIES
+================================================================ */
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ================================================================
+   TYPOGRAPHY UTILITIES
+================================================================ */
+
+@utility text-display {
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+@utility text-headline-lg {
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+@utility text-headline-lg-mobile {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+@utility text-headline-md {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0em;
+  font-weight: 600;
+}
+
+@utility text-body-lg {
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+
+@utility text-body-md {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+
+@utility text-button {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+@utility text-label-caps {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+/* ================================================================
+   MARQUEE (Industries We Serve strip)
+================================================================ */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee 45s linear infinite;
+}
+
+@utility animate-marquee-slow {
+  animation: marquee 60s linear infinite;
+}
+
+/* ================================================================
+   SCROLL ANIMATIONS
+================================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-100 {
+  transition-delay: 100ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+/* ================================================================
+   HERO RESPONSIVE ADJUSTMENTS
+================================================================ */
+
+@media (max-width: 1023px) {
+  /* Keep the illustration from becoming too dominant */
+  section:first-of-type svg {
+    max-height: 500px;
+  }
+}
+
+@media (max-width: 640px) {
+  section:first-of-type svg {
+    max-height: 390px;
+  }
+}
+
+/* =========================================================
+   HERO DIAGRAM
+   ========================================================= */
+
+.hero-diagram-wrapper {
+  position: absolute;
+  width: min(58vw, 760px);
+  height: 500px;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-diagram-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Desktop */
+@media (min-width: 1280px) {
+  .hero-diagram-wrapper {
+    width: 760px;
+    height: 500px;
+    right: -35px;
+  }
+}
+
+/* Smaller desktop */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .hero-diagram-wrapper {
+    width: 620px;
+    height: 430px;
+    right: -40px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .hero-diagram-wrapper {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    right: auto;
+    top: auto;
+    transform: none;
+    margin-top: 30px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .hero-diagram-wrapper {
+    height: 300px;
+    margin-top: 15px;
+  }
+}
+
+/* =========================================================
+   VIDEO TESTIMONIALS
+   ========================================================= */
+
+.video-testi-bg {
+  position: relative;
+  overflow: hidden;
+  padding: 88px 0 96px;
+  background: #141a32;
+}
+
+.video-testi-glow {
+  position: absolute;
+  top: -160px;
+  left: 50%;
+  width: 900px;
+  height: 500px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(147, 162, 214, 0.22), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.video-testi-bg .container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.video-testi-head {
+  text-align: center;
+}
+
+.video-testi-head .eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #93a2d6;
+}
+
+.video-testi-head h2 {
+  margin-top: 16px;
+  font-family: var(--font-display), serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.video-testi-head h2 .grey {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.video-testi-head p {
+  margin: 16px auto 0;
+  max-width: 480px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* REELS SHELL */
+
+.video-reels-shell {
+  position: relative;
+  z-index: 1;
+  margin-top: 56px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+}
+
+.video-reels-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 4px 0 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.video-reels-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* NAV ARROWS */
+
+.video-reels-nav {
+  flex-shrink: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.video-reels-nav:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+@media (min-width: 768px) {
+  .video-reels-nav {
+    display: inline-flex;
+  }
+}
+
+/* REEL CARD */
+
+.video-reel-card {
+  position: relative;
+  flex-shrink: 0;
+  width: 260px;
+  aspect-ratio: 9 / 16;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #0d1226;
+  scroll-snap-align: start;
+  box-shadow: 0 20px 45px rgba(6, 9, 22, 0.45);
+}
+
+@media (min-width: 640px) {
+  .video-reel-card {
+    width: 300px;
+  }
+}
+
+.video-reel-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.video-reel-media video,
+.video-reel-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-reel-video--hidden {
+  opacity: 0;
+}
+
+.video-reel-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(13, 18, 38, 0.05) 0%, rgba(13, 18, 38, 0.55) 100%);
+  pointer-events: none;
+}
+
+.video-reel-card.is-playing .video-reel-shade {
+  opacity: 0;
+}
+
+/* PLAY BUTTON */
+
+.video-reel-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.video-reel-play-ring {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+}
+
+.video-reel-play-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: #2d4ea3;
+  color: #ffffff;
+  padding-left: 3px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.video-reel-card:hover .video-reel-play-btn {
+  transform: scale(1.06);
+}
