@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react';
 export default function ContactSection() {
   return (
     <section id="contact" className="bg-[#fbf9f8] text-[#141a32]">
@@ -5,7 +6,7 @@ export default function ContactSection() {
           CONTACT SECTION
       ============================================================ */}
 
-      <div className="relative overflow-hidden py-10 md:py-10">
+      <div className="relative overflow-hidden py-12 md:py-16">
         {/* Background */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-24 -top-24 h-105 w-105 rounded-full bg-[#e9c176]/10 blur-3xl" />
@@ -26,13 +27,13 @@ export default function ContactSection() {
             MAIN CONTAINER
         ============================================================ */}
 
-        <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-12">
           {/* ============================================================
               HEADING
           ============================================================ */}
 
           <h1
-            className="mb-8 font-medium text-[44px] leading-none md:text-[50px]"
+            className="mb-10 font-medium text-[40px] leading-none md:text-[50px]"
             style={{
               fontFamily: 'Bodoni Moda, serif',
             }}
@@ -41,23 +42,21 @@ export default function ContactSection() {
           </h1>
 
           {/* ============================================================
-              CONTACT INFO
+              GRID: CONTACT INFO (LEFT) | DIVIDER | MAP (RIGHT)
           ============================================================ */}
 
-          <div className="mx-auto max-w-2xl">
-            <div className="w-full">
-              {/* ======================================================
-                  CONTACT
-              ====================================================== */}
-
-              <a href="tel:+919145789151" className="group block py-2">
+          <div className="grid grid-cols-1 items-center md:grid-cols-[1fr_auto_1.15fr]">
+            {/* FIRST COL: CONTACT, EMAIL, ADDRESS */}
+            <div className="flex flex-col justify-center space-y-6">
+              {/* CONTACT */}
+              <a href="tel:+919145789151" className="group block">
                 <div className="flex items-center gap-4">
                   {/* Phone Icon */}
                   <div
                     className="
                       flex
-                      h-10
-                      w-10
+                      h-11
+                      w-11
                       shrink-0
                       items-center
                       justify-center
@@ -92,23 +91,22 @@ export default function ContactSection() {
                       Contact
                     </p>
 
-                    <p className="mt-1 text-[18px] font-semibold text-[#141a32]">+91 9145789151</p>
+                    <p className="mt-1 text-[17px] font-semibold text-[#141a32] sm:text-[18px]">
+                      +91 9145789151
+                    </p>
                   </div>
                 </div>
               </a>
 
-              {/* ======================================================
-                  EMAIL
-              ====================================================== */}
-
-              <a href="mailto:connect@nbbs.in" className="group block py-2">
+              {/* EMAIL */}
+              <a href="mailto:connect@nbbs.in" className="group block">
                 <div className="flex items-center gap-4">
                   {/* Email Icon */}
                   <div
                     className="
                       flex
-                      h-10
-                      w-10
+                      h-11
+                      w-11
                       shrink-0
                       items-center
                       justify-center
@@ -136,33 +134,32 @@ export default function ContactSection() {
                   </div>
 
                   {/* Email Text */}
-                  <div className="mb-5">
+                  <div>
                     <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#141a32]">
                       Email
                     </p>
 
-                    <p className="mt-1 text-[18px] font-semibold text-[#141a32]">connect@nbbs.in</p>
+                    <p className="mt-1 text-[17px] font-semibold text-[#141a32] sm:text-[18px]">
+                      connect@nbbs.in
+                    </p>
                   </div>
                 </div>
               </a>
 
-              {/* ======================================================
-                  LOCATION
-              ====================================================== */}
-
+              {/* LOCATION */}
               <a
                 href="https://www.google.com/maps/search/?api=1&query=8%2C%202nd%20Floor%2C%20Smita%20Apartment%202%20Patil%20Lane%2C%202%2C%20College%20Rd%2C%20opp.%20Magnum%20Hospital%2C%20Nashik%2C%20Maharashtra%20422005%2C%20India"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block py-2"
+                className="group block"
               >
                 <div className="flex items-start gap-4">
                   {/* Location Icon */}
                   <div
                     className="
                       flex
-                      h-10
-                      w-10
+                      h-11
+                      w-11
                       shrink-0
                       items-center
                       justify-center
@@ -195,35 +192,40 @@ export default function ContactSection() {
                   </div>
 
                   {/* Location Text */}
-                  <div className="mb-5">
+                  <div>
                     <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#141a32]">
                       Location
                     </p>
 
-                    <p className="mt-1 text-[18px] font-semibold leading-7 text-[#141a32]">
+                    <p className="mt-1 text-[16px] font-semibold leading-7 text-[#141a32] sm:text-[17px]">
                       8, 2nd Floor, Smita Apartment 2 Patil Lane, 2, College Rd, opp. Magnum
                       Hospital, Nashik, Maharashtra 422005, India
                     </p>
                   </div>
                 </div>
               </a>
+            </div>
 
-              {/* ======================================================
-                  GOOGLE MAP
-              ====================================================== */}
+            {/* DIVIDER */}
+            <div
+              className="my-8 h-px w-full bg-[#141a32]/10 md:my-0 md:h-full md:min-h-[300px] md:w-px md:self-stretch md:mx-8 lg:mx-12 xl:mx-14"
+              aria-hidden="true"
+            />
 
+            {/* SECOND COL: GOOGLE MAP */}
+            <div className="w-full">
               <div
                 className="
-                  mt-4
                   overflow-hidden
-                  rounded-xl
+                  rounded-2xl
                   border
                   border-[#c6c6ce]
                   bg-white
+                  shadow-[0_8px_30px_rgba(20,26,50,0.06)]
                 "
               >
                 {/* Google Map */}
-                <div className="h-64 w-full overflow-hidden">
+                <div className="h-52 w-full overflow-hidden sm:h-48 md:h-56">
                   <iframe
                     src="https://www.google.com/maps?q=8%2C%202nd%20Floor%2C%20Smita%20Apartment%202%20Patil%20Lane%2C%202%2C%20College%20Rd%2C%20opp.%20Magnum%20Hospital%2C%20Nashik%2C%20Maharashtra%20422005%2C%20India&output=embed"
                     width="100%"
@@ -233,21 +235,25 @@ export default function ContactSection() {
                     }}
                     loading="lazy"
                     allowFullScreen
+                    sandbox="allow-scripts allow-popups"
                     referrerPolicy="no-referrer-when-downgrade"
                     title="NB Business Solutions Location"
                   />
                 </div>
 
                 {/* Location Details */}
-                <div className="flex items-center justify-between gap-4 px-5 py-4">
-                  {/* View Map */}
+                <div className="flex items-center justify-between gap-4 border-t border-[#c6c6ce]/40 bg-white px-5 py-3.5">
+                  <span className="text-[12px] font-medium text-[#141a32]/70">
+                    College Road, Nashik, Maharashtra
+                  </span>
+
                   <a
                     href="https://www.google.com/maps/search/?api=1&query=8%2C%202nd%20Floor%2C%20Smita%20Apartment%202%20Patil%20Lane%2C%202%2C%20College%20Rd%2C%20opp.%20Magnum%20Hospital%2C%20Nashik%2C%20Maharashtra%20422005%2C%20India"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="
                       shrink-0
-                      text-[9px]
+                      text-[10px]
                       font-bold
                       uppercase
                       tracking-[0.15em]
@@ -256,7 +262,7 @@ export default function ContactSection() {
                       hover:text-[#141a32]
                     "
                   >
-                    View Map →
+                    View Map <ArrowRight className="ml-1 inline-block h-3 w-3" />
                   </a>
                 </div>
               </div>
