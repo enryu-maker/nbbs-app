@@ -4,24 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { videoTestimonials } from '@/lib/video-testimonials';
 
-const THUMB_SEEK_SECONDS = 1.5;
-
-function capturePoster(video: HTMLVideoElement): string | null {
-  if (!video.videoWidth || !video.videoHeight) return null;
-
-  try {
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL('image/jpeg', 0.75);
-  } catch {
-    return null;
-  }
-}
-
 interface VideoReelCardProps {
   src: string;
   label: string;
@@ -31,102 +13,69 @@ interface VideoReelCardProps {
 }
 
 function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardProps) {
-  const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const thumbTimeRef = useRef(THUMB_SEEK_SECONDS);
-  const [poster, setPoster] = useState<string | null>(null);
-  const [thumbReady, setThumbReady] = useState(false);
 
-  useEffect(() => {
-    const card = cardRef.current;
-    const video = videoRef.current;
-    if (!card || !video || poster) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
-
-        const prepareThumbnail = () => {
-          const target = Math.min(
-            THUMB_SEEK_SECONDS,
-            Math.max(0.5, (video.duration || THUMB_SEEK_SECONDS) * 0.12),
-          );
-          thumbTimeRef.current = target;
-
-          const onSeeked = () => {
-            const dataUrl = capturePoster(video);
-            if (dataUrl) setPoster(dataUrl);
-            setThumbReady(true);
-            video.pause();
-            video.removeEventListener('seeked', onSeeked);
-          };
-
-          video.addEventListener('seeked', onSeeked);
-          video.currentTime = target;
-        };
-
-        if (video.readyState >= 1) {
-          prepareThumbnail();
-        } else {
-          video.preload = 'auto';
-          video.addEventListener('loadedmetadata', prepareThumbnail, {
-            once: true,
-          });
-          video.load();
-        }
-
-        observer.disconnect();
-      },
-      { rootMargin: '120px' },
-    );
-
-    observer.observe(card);
-    return () => observer.disconnect();
-  }, [poster]);
-
+  // Pause and reset time when another video becomes active
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isActive) {
-      video.muted = false;
-      video.currentTime = 0;
-      void video.play().catch(() => {});
-      return;
+    if (!isActive) {
+      video.pause();
+      video.currentTime = 0.5;
     }
-
-    video.muted = true;
-
-    video.pause();
-    video.currentTime = thumbTimeRef.current;
   }, [isActive]);
 
-  const showPoster = !isActive && poster;
+  // Seek to 0.5s once metadata is loaded so browser renders a valid poster frame
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedMetadata = () => {
+      if (video.currentTime === 0) {
+        video.currentTime = 0.5;
+      }
+    };
+
+    if (video.readyState >= 1) {
+      handleLoadedMetadata();
+    } else {
+      video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
+    }
+  }, []);
+
+  const handlePlayClick = () => {
+    onPlay();
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = 0;
+      video.muted = false;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          video.muted = true;
+          void video.play();
+        });
+      }
+    }
+  };
 
   return (
-    <article
-      ref={cardRef}
-      className={`video-reel-card${isActive ? ' is-playing' : ''}${thumbReady || poster ? ' has-thumb' : ''}`}
-    >
+    <article className={`video-reel-card${isActive ? ' is-playing' : ''}`}>
       <div className="video-reel-media">
-        {showPoster && <img src={poster} alt="" className="video-reel-poster" aria-hidden />}
-        <video
-          ref={videoRef}
-          src={src}
-          playsInline
-          muted
-          preload="none"
-          controls={isActive}
-          className={showPoster ? 'video-reel-video--hidden' : undefined}
-          onEnded={onEnded}
-        />
+        <video ref={videoRef} playsInline preload="metadata" controls={isActive} onEnded={onEnded}>
+          <source src={src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
         <div className="video-reel-shade" aria-hidden />
+
         {!isActive && (
           <button
             type="button"
             className="video-reel-play"
             aria-label={`Play ${label} testimonial`}
-            onClick={onPlay}
+            onClick={handlePlayClick}
           >
             <span className="video-reel-play-ring" aria-hidden />
             <span className="video-reel-play-btn">
