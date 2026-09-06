@@ -2,6 +2,7 @@
 'use client';
 
 import { useAnchorCustomers } from '@/src/hooks';
+import { googleReviews } from '@/lib/google-reviews';
 
 interface ReviewItem {
   id: string;
@@ -82,7 +83,7 @@ function ReviewCard({ review }: { review: ReviewItem }) {
 export default function GoogleReview() {
   const { customers } = useAnchorCustomers();
 
-  const reviews: ReviewItem[] = customers
+  const customerReviews: ReviewItem[] = (customers || [])
     .filter((customer) => Boolean(customer.quote))
     .map((customer, index) => ({
       id: `${customer.company || 'customer'}-${index}`,
@@ -90,9 +91,22 @@ export default function GoogleReview() {
       review: customer.quote,
     }));
 
-  if (!reviews || reviews.length === 0) {
+  const fallbackReviews: ReviewItem[] = googleReviews.map((item) => ({
+    id: item.id,
+    name: item.name,
+    review: item.review,
+  }));
+
+  const baseReviews = customerReviews.length > 0 ? customerReviews : fallbackReviews;
+
+  if (!baseReviews || baseReviews.length === 0) {
     return null;
   }
+
+  // Ensure each track has enough cards (at least 10) so it comfortably exceeds any screen width
+  // allowing a completely seamless, continuous infinite loop without blank gaps or snapping.
+  const repeatCount = Math.max(2, Math.ceil(10 / baseReviews.length));
+  const displayReviews = Array.from({ length: repeatCount }, () => baseReviews).flat();
 
   return (
     <section
@@ -107,28 +121,24 @@ export default function GoogleReview() {
       {/* =====================================================
           HEADER
       ====================================================== */}
-
-      {/* =====================================================
-    HEADER
-====================================================== */}
       <div
         className="
-    mx-auto
-    w-full
-    max-w-4xl
-    px-5
-    text-center
-  "
+          mx-auto
+          w-full
+          max-w-4xl
+          px-5
+          text-center
+        "
       >
         {/* SMALL HEADING */}
         <p
           className="
-      text-sm
-      font-semibold
-      tracking-[0.08em]
-      text-[#111827]
-      sm:text-base
-    "
+            text-sm
+            font-semibold
+            tracking-[0.08em]
+            text-[#111827]
+            sm:text-base
+          "
           style={{
             fontFamily: 'Inter, sans-serif',
           }}
@@ -139,15 +149,15 @@ export default function GoogleReview() {
         {/* MAIN HEADING */}
         <h2
           className="
-      mt-3
-      text-3xl
-      font-bold
-      leading-tight
-      tracking-[-0.03em]
-      text-[#111827]
-      sm:text-4xl
-      md:text-5xl
-    "
+            mt-3
+            text-3xl
+            font-bold
+            leading-tight
+            tracking-[-0.03em]
+            text-[#111827]
+            sm:text-4xl
+            md:text-5xl
+          "
           style={{
             fontFamily: 'Inter, sans-serif',
           }}
@@ -159,10 +169,8 @@ export default function GoogleReview() {
       {/* =====================================================
           MARQUEE
       ====================================================== */}
-
       <div
         className="
-          group
           relative
           mt-12
           w-full
@@ -172,16 +180,15 @@ export default function GoogleReview() {
         <div
           className="
             animate-marquee-slow
-            group-hover:[animation-play-state:paused]
             flex
             w-max
             items-stretch
+            will-change-transform
           "
         >
           {/* =================================================
               TRACK 1
           ================================================== */}
-
           <div
             className="
               flex
@@ -190,16 +197,15 @@ export default function GoogleReview() {
             "
             aria-hidden={false}
           >
-            {reviews.map((review) => (
-              <ReviewCard key={`track-1-${review.id}`} review={review} />
+            {displayReviews.map((review, idx) => (
+              <ReviewCard key={`track-1-${review.id}-${idx}`} review={review} />
             ))}
           </div>
 
           {/* =================================================
               TRACK 2
-              Exact duplicate for seamless loop
+              Exact duplicate for seamless continuous loop
           ================================================== */}
-
           <div
             className="
               flex
@@ -208,8 +214,8 @@ export default function GoogleReview() {
             "
             aria-hidden="true"
           >
-            {reviews.map((review) => (
-              <ReviewCard key={`track-2-${review.id}`} review={review} />
+            {displayReviews.map((review, idx) => (
+              <ReviewCard key={`track-2-${review.id}-${idx}`} review={review} />
             ))}
           </div>
         </div>
