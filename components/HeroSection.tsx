@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import HeroScribble from './Scribble';
 import { ArrowRight } from 'lucide-react';
 
 export default function HeroSection() {
@@ -53,17 +53,8 @@ export default function HeroSection() {
 
           {/* RIGHT CONTENT (SCRIBBLE + CTA + TAGLINE) */}
           <div className="flex w-full min-w-0 flex-col items-center justify-center text-center md:pl-unit-md">
-            {/* SCRIBBLE IMAGE */}
-            <div className="relative w-full">
-              <Image
-                src="/scribble-update.png"
-                alt="From Chaos to Clarity - Business Diagnosis and Solution Implementation"
-                width={2572}
-                height={724}
-                priority
-                className="h-auto w-full object-contain"
-              />
-            </div>
+            {/* SCRIBBLE */}
+            <HeroScribble />
 
             {/* CTA */}
             <div className="mt-unit-lg sm:mt-unit-xl">
