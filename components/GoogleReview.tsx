@@ -149,10 +149,7 @@ export default function GoogleReview() {
         {/* MAIN HEADING */}
         <h2
           className="
-            mt-3
-            text-3xl
             font-bold
-            leading-tight
             tracking-[-0.03em]
             text-[#111827]
             sm:text-4xl
@@ -162,7 +159,7 @@ export default function GoogleReview() {
             fontFamily: 'Inter, sans-serif',
           }}
         >
-          Trusted by businessmen like you.
+          Trusted by businessmen & women like you.
         </h2>
       </div>
 
