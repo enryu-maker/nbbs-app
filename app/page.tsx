@@ -23,38 +23,38 @@ export default function Home() {
           id="home"
           className="mt-20 w-full overflow-hidden border-y border-black/5 bg-[#fbf9f8]"
         >
-          <div className="mx-auto w-full max-w-[1500px] px-5 py-10 sm:px-8 sm:py-12 md:px-12 md:py-14 lg:px-20 xl:px-28">
-            {/* EYEBROW */}
-            <div className="mb-8 flex items-center justify-center gap-3 sm:mb-10 md:mb-12">
-              <span className="h-px w-7 bg-[#172039]/40 sm:w-9" />
+          <div className="w-full px-margin-mobile py-unit-lg sm:py-unit-xl">
+            <div className="grid grid-cols-1 items-center gap-unit-lg md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-x-unit-md">
+              {/* EYEBROW — same 1fr / auto / 1fr center track as the column divider */}
+              <div className="col-span-full mb-unit-lg grid w-full grid-cols-[1fr_auto_1fr] items-center gap-unit-sm sm:mb-unit-xl">
+                <span className="h-px w-unit-lg justify-self-end bg-primary/40 sm:w-unit-xl" />
 
-              <span className="text-[8px] font-semibold tracking-[0.2em] text-[#34415c] sm:text-[9px] md:text-[10px]">
-                INTEGRATED BUSINESS SOLUTIONS
-              </span>
+                <span className="text-label-caps text-center uppercase text-on-surface-variant">
+                  INTEGRATED BUSINESS SOLUTIONS
+                </span>
 
-              <span className="h-px w-7 bg-[#172039]/40 sm:w-9" />
-            </div>
+                <span className="h-px w-unit-lg justify-self-start bg-primary/40 sm:w-unit-xl" />
+              </div>
 
-            <div className="grid grid-cols-1 items-center md:grid-cols-[1fr_auto_1fr]">
               {/* LEFT CONTENT */}
-              <div className="flex w-full flex-col items-center justify-center text-center md:items-start md:text-left">
+              <div className="flex w-full min-w-0 flex-col items-center justify-center text-center md:items-start md:pr-unit-md md:text-left">
                 {/* TITLE */}
-                <h1 className="w-full max-w-[700px] font-[var(--font-display)] text-[clamp(2.5rem,5.5vw,5.125rem)] font-semibold leading-[0.96] tracking-[-0.04em] text-[#172039]">
-                  <span className="inline-block whitespace-nowrap">
-                    From <span className="font-normal italic text-[#c9a86a]">Diagnosis</span>
+                <h1 className="w-full font-display text-4xl font-semibold leading-none tracking-tight text-primary sm:text-5xl md:text-6xl lg:text-7xl">
+                  <span className="inline-block">
+                    From <span className="font-normal italic text-secondary">Diagnosis</span>
                   </span>
 
                   <br />
 
-                  <span className="inline-block whitespace-nowrap">to Solution</span>
+                  <span className="inline-block">to Solution</span>
 
                   <br />
 
-                  <span className="inline-block whitespace-nowrap">Implementation.</span>
+                  <span className="inline-block">Implementation.</span>
                 </h1>
 
                 {/* BODY */}
-                <p className="mt-6 w-full max-w-[620px] text-sm leading-7 text-[#34415c] sm:text-[15px] md:text-base">
+                <p className="text-body-md mt-unit-lg w-full text-on-surface-variant sm:text-body-lg">
                   NB Business Solutions helps MSME founders identify what is holding their business
                   back, create clarity on what needs attention, and implement practical business
                   solutions for sustainable growth.
@@ -63,16 +63,16 @@ export default function Home() {
 
               {/* DIVIDER */}
               <div
-                className="my-8 h-px w-full bg-[#172039]/30 md:my-4 md:h-full md:min-h-[300px] md:w-px md:self-stretch md:mx-8 lg:mx-12 xl:mx-16"
+                className="bg-primary/30 h-px w-full md:my-unit-sm md:h-full md:min-h-80 md:w-px md:self-stretch"
                 aria-hidden="true"
               />
 
               {/* RIGHT CONTENT (SCRIBBLE + CTA + TAGLINE) */}
-              <div className="flex w-full flex-col items-center justify-center text-center">
+              <div className="flex w-full min-w-0 flex-col items-center justify-center text-center md:pl-unit-md">
                 {/* SCRIBBLE IMAGE */}
-                <div className="relative w-full max-w-[580px] lg:max-w-[680px]">
+                <div className="relative w-full">
                   <Image
-                    src="/scribble.png"
+                    src="/scribble-update.png"
                     alt="From Chaos to Clarity - Business Diagnosis and Solution Implementation"
                     width={2572}
                     height={724}
@@ -82,15 +82,15 @@ export default function Home() {
                 </div>
 
                 {/* CTA */}
-                <div className="mt-8 sm:mt-9">
+                <div className="mt-unit-lg sm:mt-unit-xl">
                   <a
                     href="/#services"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-md bg-[#172039] px-6 py-3 text-[10px] font-bold tracking-[0.1em] text-white shadow-[0_12px_30px_rgba(23,32,57,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c9a86a] hover:text-[#172039] sm:px-8 sm:text-[11px]"
+                    className="text-button group inline-flex min-h-12 items-center justify-center gap-unit-sm rounded-md bg-primary px-unit-lg py-unit-sm uppercase tracking-widest text-on-primary shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary hover:text-primary sm:px-unit-xl"
                   >
                     <span>Explore NBBS Ecosystem</span>
 
                     <ArrowRight
-                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                      className="size-4 transition-transform duration-300 group-hover:translate-x-1"
                       aria-hidden="true"
                       strokeWidth={2.25}
                     />
@@ -98,7 +98,7 @@ export default function Home() {
                 </div>
 
                 {/* META */}
-                <div className="mt-5 flex items-center justify-center gap-2 text-[9px] font-medium tracking-[0.16em] text-[#c9a86a] sm:text-[10px]">
+                <div className="text-label-caps mt-unit-md flex items-center justify-center gap-unit-sm uppercase text-secondary">
                   <span>STRATEGY</span>
                   <span>•</span>
                   <span>EXECUTION</span>
