@@ -7,11 +7,42 @@ export const metadata: Metadata = {
   description:
     'Disclaimer covering the nature of NBBS consulting services, limitation of liability, and client responsibilities.',
   alternates: { canonical: '/disclaimer' },
+  openGraph: {
+    title: 'Consulting Disclaimer & Limitation of Liability | NB Business Solutions',
+    description:
+      'Disclaimer covering the nature of NBBS consulting services, limitation of liability, and client responsibilities.',
+    url: '/disclaimer',
+    type: 'website',
+  },
+};
+
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Consulting Disclaimer & Limitation of Liability',
+  description:
+    'Disclaimer covering the nature of NBBS consulting services, limitation of liability, and client responsibilities.',
+  url: 'https://nbbs.in/disclaimer',
+  datePublished: '2026-09-07',
+  dateModified: '2026-09-07',
+  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://nbbs.in' },
+      { '@type': 'ListItem', position: 2, name: 'Disclaimer', item: 'https://nbbs.in/disclaimer' },
+    ],
+  },
 };
 
 export default function DisclaimerPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
+      />
       <Header />
       <main className="min-h-screen bg-[#fbf9f8] text-[#141a32]">
         <div className="mx-auto max-w-3xl px-6 py-24 sm:px-8">
@@ -23,8 +54,8 @@ export default function DisclaimerPage() {
           <div className="mt-10 space-y-8 text-sm leading-7 text-slate-700 sm:text-base">
             <p>
               This disclaimer applies to the consulting, advisory, strategic, educational,
-              implementation support, and other business services provided by NB Business
-              Solutions (&ldquo;NBBS&rdquo;).
+              implementation support, and other business services provided by NB Business Solutions
+              (&ldquo;NBBS&rdquo;).
             </p>
 
             <section>
@@ -32,13 +63,13 @@ export default function DisclaimerPage() {
                 1.1 Nature of Our Services
               </h2>
               <p>
-                NBBS offers business consulting and advisory services to assist business owners
-                and management teams in gaining clarity, identifying opportunities, solving
-                business problems and making more informed decisions.
+                NBBS offers business consulting and advisory services to assist business owners and
+                management teams in gaining clarity, identifying opportunities, solving business
+                problems and making more informed decisions.
               </p>
               <p className="mt-3">
-                Our recommendations, strategies, frameworks, reports, action plans, workshops,
-                tools and other resources are for business guidance and decision support purposes.
+                Our recommendations, strategies, frameworks, reports, action plans, workshops, tools
+                and other resources are for business guidance and decision support purposes.
               </p>
               <p className="mt-3">
                 The nature and scope of services may vary depending on the engagement or service
@@ -56,9 +87,9 @@ export default function DisclaimerPage() {
               </p>
               <p className="mt-3">
                 However, NBBS does not guarantee any specific business or financial outcome. This
-                includes, but is not limited to, increases in revenue, profitability, sales,
-                leads, customers, funding, business growth, operational efficiency, cost savings,
-                or achievement of business targets.
+                includes, but is not limited to, increases in revenue, profitability, sales, leads,
+                customers, funding, business growth, operational efficiency, cost savings, or
+                achievement of business targets.
               </p>
               <p className="mt-3">
                 Business outcomes depend on several factors, including implementation, management
@@ -81,8 +112,8 @@ export default function DisclaimerPage() {
                 accurate, complete, current, and not misleading.
               </p>
               <p className="mt-3">
-                NBBS shall not be responsible for recommendations or outcomes materially affected
-                by inaccurate, incomplete, outdated, or withheld information.
+                NBBS shall not be responsible for recommendations or outcomes materially affected by
+                inaccurate, incomplete, outdated, or withheld information.
               </p>
             </section>
 
@@ -90,8 +121,8 @@ export default function DisclaimerPage() {
               <h2 className="mb-2 text-lg font-semibold text-[#141a32]">1.4 Professional Advice</h2>
               <p>
                 Unless expressly stated otherwise, NBBS&rsquo;s services are not a substitute for
-                legal, tax, accounting, audit, investment, financial, insurance, or other
-                regulated professional advice.
+                legal, tax, accounting, audit, investment, financial, insurance, or other regulated
+                professional advice.
               </p>
               <p className="mt-3">
                 Where a business matter requires specialised professional advice, clients should
@@ -101,7 +132,9 @@ export default function DisclaimerPage() {
             </section>
 
             <section>
-              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">1.5 Client Responsibility</h2>
+              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">
+                1.5 Client Responsibility
+              </h2>
               <p>
                 The client remains responsible for evaluating, approving, implementing, modifying,
                 or rejecting any recommendation provided by NBBS.
@@ -111,9 +144,8 @@ export default function DisclaimerPage() {
                 client&rsquo;s own discretion and responsibility.
               </p>
               <p className="mt-3">
-                NBBS does not control the client&rsquo;s business operations, management
-                decisions, employees, finances, customers, vendors, or implementation of
-                recommendations.
+                NBBS does not control the client&rsquo;s business operations, management decisions,
+                employees, finances, customers, vendors, or implementation of recommendations.
               </p>
               <p className="mt-3">
                 Accordingly, NBBS shall not be responsible for the consequences of decisions taken
@@ -157,13 +189,15 @@ export default function DisclaimerPage() {
                 the client to NBBS for that engagement.
               </p>
               <p className="mt-3">
-                Nothing in this disclaimer shall exclude or limit liability to the extent that
-                such exclusion or limitation is not permitted under applicable law.
+                Nothing in this disclaimer shall exclude or limit liability to the extent that such
+                exclusion or limitation is not permitted under applicable law.
               </p>
             </section>
 
             <section>
-              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">1.8 No Partnership or Agency</h2>
+              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">
+                1.8 No Partnership or Agency
+              </h2>
               <p>
                 Unless expressly agreed otherwise in writing, engaging NBBS does not create a
                 partnership, joint venture, employment, agency, fiduciary, or similar relationship
@@ -181,8 +215,8 @@ export default function DisclaimerPage() {
               </h2>
               <p>
                 All business decisions, actions, and outcomes you make and execute or endure as an
-                outcome of our recommendations are your responsibility. Any advice or strategies
-                are at your discretion.
+                outcome of our recommendations are your responsibility. Any advice or strategies are
+                at your discretion.
               </p>
             </section>
 
@@ -190,12 +224,22 @@ export default function DisclaimerPage() {
               <h2 className="mb-2 text-lg font-semibold text-[#141a32]">
                 1.10 Acceptance of Disclaimer
               </h2>
-              <p>By engaging with NBBS or using its services, resources, tools, or recommendations, you acknowledge that:</p>
+              <p>
+                By engaging with NBBS or using its services, resources, tools, or recommendations,
+                you acknowledge that:
+              </p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li>NBBS provides business guidance and advisory support;</li>
-                <li>Recommendations are based on information and circumstances available at the time;</li>
-                <li>business decisions and implementation remain the client&rsquo;s responsibility; and</li>
-                <li>NBBS does not guarantee any specific business, financial, or commercial outcome.</li>
+                <li>
+                  Recommendations are based on information and circumstances available at the time;
+                </li>
+                <li>
+                  business decisions and implementation remain the client&rsquo;s responsibility;
+                  and
+                </li>
+                <li>
+                  NBBS does not guarantee any specific business, financial, or commercial outcome.
+                </li>
               </ul>
             </section>
 

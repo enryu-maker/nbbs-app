@@ -7,15 +7,53 @@ export const metadata: Metadata = {
   description:
     'How NBBS intellectual property, frameworks, and materials may and may not be used by clients.',
   alternates: { canonical: '/intellectual-property' },
+  openGraph: {
+    title: 'Intellectual Property Policy | NB Business Solutions',
+    description:
+      'How NBBS intellectual property, frameworks, and materials may and may not be used by clients.',
+    url: '/intellectual-property',
+    type: 'website',
+  },
+};
+
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Intellectual Property Policy',
+  description:
+    'How NBBS intellectual property, frameworks, and materials may and may not be used by clients.',
+  url: 'https://nbbs.in/intellectual-property',
+  datePublished: '2026-09-07',
+  dateModified: '2026-09-07',
+  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://nbbs.in' },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Intellectual Property',
+        item: 'https://nbbs.in/intellectual-property',
+      },
+    ],
+  },
 };
 
 export default function IntellectualPropertyPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
+      />
       <Header />
       <main className="min-h-screen bg-[#fbf9f8] text-[#141a32]">
         <div className="mx-auto max-w-3xl px-6 py-24 sm:px-8">
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Intellectual Property (IP)</h1>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">
+            Intellectual Property (IP)
+          </h1>
           <p className="mt-2 text-sm text-slate-500">Effective Date: September 7, 2026</p>
 
           <div className="mt-10 space-y-8 text-sm leading-7 text-slate-700 sm:text-base">
@@ -25,12 +63,14 @@ export default function IntellectualPropertyPage() {
               meaningful action.
             </p>
             <p>
-              We want you to use what we provide to improve your business, while also respecting
-              the work and intellectual property that goes into creating it.
+              We want you to use what we provide to improve your business, while also respecting the
+              work and intellectual property that goes into creating it.
             </p>
 
             <section>
-              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">2.1 What Belongs to NBBS</h2>
+              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">
+                2.1 What Belongs to NBBS
+              </h2>
               <p>
                 Unless specifically agreed otherwise in writing, the frameworks, methodologies,
                 processes, tools, templates, reports, training materials, presentations, content,
@@ -75,10 +115,16 @@ export default function IntellectualPropertyPage() {
               </p>
               <p className="mt-3">Without our prior written permission, you may not:</p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
-                <li>Copy or reproduce our proprietary frameworks, reports, tools, or materials for commercial use</li>
+                <li>
+                  Copy or reproduce our proprietary frameworks, reports, tools, or materials for
+                  commercial use
+                </li>
                 <li>Resell, distribute, license, or commercially exploit our materials</li>
                 <li>Repackage our frameworks or methodologies and present them as your own</li>
-                <li>Use our materials to provide competing consulting, training, or commercial services</li>
+                <li>
+                  Use our materials to provide competing consulting, training, or commercial
+                  services
+                </li>
                 <li>Publish or distribute our proprietary content publicly</li>
                 <li>Remove ownership, copyright, or trademark notices</li>
                 <li>
@@ -103,8 +149,8 @@ export default function IntellectualPropertyPage() {
               </p>
               <p className="mt-3">
                 Similarly, using our recommendations or learning from our consulting does not mean
-                that you are prohibited from using your own business knowledge, experience,
-                skills, or general learnings in running your business.
+                that you are prohibited from using your own business knowledge, experience, skills,
+                or general learnings in running your business.
               </p>
             </section>
 
@@ -122,10 +168,12 @@ export default function IntellectualPropertyPage() {
             </section>
 
             <section>
-              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">2.6 Third-Party Materials</h2>
+              <h2 className="mb-2 text-lg font-semibold text-[#141a32]">
+                2.6 Third-Party Materials
+              </h2>
               <p>
-                Some software, platforms, images, technologies, trademarks, or other materials
-                used by NBBS may belong to third parties.
+                Some software, platforms, images, technologies, trademarks, or other materials used
+                by NBBS may belong to third parties.
               </p>
               <p className="mt-3">
                 Those materials remain subject to the intellectual property rights and terms of
@@ -138,9 +186,8 @@ export default function IntellectualPropertyPage() {
                 2.7 Recording and Reproduction
               </h2>
               <p>
-                Our consultations, workshops, training sessions, presentations, demonstrations,
-                and other engagements may contain proprietary information, frameworks, and
-                materials.
+                Our consultations, workshops, training sessions, presentations, demonstrations, and
+                other engagements may contain proprietary information, frameworks, and materials.
               </p>
               <p className="mt-3">
                 Unless we have given you permission in writing, please do not record, reproduce,
