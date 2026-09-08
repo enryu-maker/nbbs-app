@@ -64,7 +64,7 @@ export default function Philosophy() {
           {principles.map((p) => (
             <div
               key={p.number}
-              className={`group flex flex-col min-h-[300px] sm:min-h-[340px] lg:min-h-[380px] xl:min-h-[420px] 2xl:min-h-[450px] border-r border-b border-surface/15 px-5 py-6 sm:px-6 sm:py-7 lg:px-3.5 lg:py-6 xl:px-5 xl:py-7 2xl:px-6 2xl:py-8 transition-colors duration-300 hover:bg-secondary/5 ${
+              className={`group flex flex-col border-r border-b border-surface/15 px-5 py-6 sm:px-6 sm:py-7 lg:px-3.5 lg:py-6 xl:px-5 xl:py-7 2xl:px-6 2xl:py-8 transition-colors duration-300 hover:bg-secondary/5 ${
                 p.number === '05' ? 'sm:col-span-2 lg:col-span-1' : ''
               }`}
             >
