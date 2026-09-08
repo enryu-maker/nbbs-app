@@ -6,7 +6,7 @@ export default function ContactSection() {
           CONTACT SECTION
       ============================================================ */}
 
-      <div className="relative overflow-hidden py-12 md:py-16">
+      <div className="relative overflow-hidden py-6 md:py-6">
         {/* Background */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-24 -top-24 h-105 w-105 rounded-full bg-[#e9c176]/10 blur-3xl" />
