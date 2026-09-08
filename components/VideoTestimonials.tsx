@@ -154,15 +154,17 @@ export function VideoTestimonials() {
   }
 
   return (
-    <section id="video-testimonials" className="video-testi-bg">
+    <section id="video-testimonials" className="video-testi-bg pt-4">
       <div className="video-testi-glow" aria-hidden />
       <div className="container">
         <div className="video-testi-head">
           <span className="eyebrow">Video Testimonials</span>
           <h2>
-            Hear it from <span className="grey">founders.</span>
+            Hear it from <span className="grey">entrepreneurs.</span>
           </h2>
-          <p>Real stories from founders who attended the workshop and walked away with clarity.</p>
+          <p>
+            Real stories from entrepreneurs who attended the workshop and walked away with clarity.
+          </p>
         </div>
       </div>
 
