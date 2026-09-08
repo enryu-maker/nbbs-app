@@ -5,7 +5,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="mt-20 w-full overflow-hidden border-y border-black/5 bg-[#fbf9f8] px-4 sm:px-6 md:px-8"
+      className="mt-12 w-full overflow-hidden border-y border-black/5 bg-[#fbf9f8] px-2 sm:px-4 md:px-2"
     >
       <div className="mx-auto w-full max-w-container-max px-margin-mobile py-unit-lg sm:py-unit-xl">
         <div className="grid grid-cols-1 items-center gap-unit-lg md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-x-unit-md">
