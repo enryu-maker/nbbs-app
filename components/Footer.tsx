@@ -197,15 +197,15 @@ export default function Footer() {
             <span>© 2026 NB Business Solutions, Nashik.</span>
 
             <div className="flex flex-wrap gap-3">
-              <Link href="#" className="transition-colors hover:text-white">
+              <Link href="/disclaimer" className="transition-colors hover:text-white">
                 Disclaimer
               </Link>
 
-              <Link href="#" className="transition-colors hover:text-white">
+              <Link href="/intellectual-property" className="transition-colors hover:text-white">
                 IP
               </Link>
 
-              <Link href="#" className="transition-colors hover:text-white">
+              <Link href="/cookie-policy" className="transition-colors hover:text-white">
                 Cookies
               </Link>
             </div>
