@@ -114,8 +114,8 @@ export default function GoogleReview() {
         relative
         overflow-hidden
         bg-white
-        py-16
-        md:py-20
+        py-12
+        md:py-12
       "
     >
       {/* =====================================================
