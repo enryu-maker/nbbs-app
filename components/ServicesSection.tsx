@@ -250,9 +250,9 @@ export default function ServicesSection() {
                     MAIN CONTENT
                 ================================================= */}
 
-                  <div className="w-full px-5 pb-14 pt-16 sm:px-8 sm:pb-14 sm:pt-20 md:px-10 lg:h-full lg:px-16">
+                  <div className="w-full px-5 pb-14 pt-16 sm:px-8 sm:pb-14 sm:pt-20 md:px-10 lg:h-full lg:px-16 lg:pt-14 lg:pb-6 xl:pt-16 xl:pb-8 2xl:pt-20 2xl:pb-12">
                     <div className="mx-auto flex w-full max-w-[1600px] items-start lg:h-full lg:items-center">
-                      <div className="grid w-full grid-cols-1 gap-8 sm:gap-10 lg:max-h-[calc(100vh-130px)] lg:grid-cols-12 lg:gap-0 lg:overflow-hidden">
+                      <div className="grid w-full grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-0">
                         {/* =================================================
                           LEFT COLUMN — `order-1` pins it to the top of
                           the mobile stack. On lg+ it keeps its original
@@ -262,9 +262,9 @@ export default function ServicesSection() {
                           of the column instead of vertically centered.
                       ================================================= */}
 
-                        <div className="order-1 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:justify-start lg:pr-10 xl:pr-20">
+                        <div className="order-1 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:justify-start lg:pr-6 xl:pr-10 2xl:pr-20">
                           <h3
-                            className="mb-3 text-[34px] font-medium leading-[0.98] text-primary sm:mt-4 sm:text-[40px] md:text-[48px] lg:mt-5 lg:text-[54px] xl:text-[52px]"
+                            className="mb-2 text-[34px] font-medium leading-[0.98] text-primary sm:mt-4 sm:text-[40px] md:text-[48px] lg:mt-3 lg:text-[38px] xl:mt-4 xl:text-[44px] 2xl:mt-5 2xl:text-[52px]"
                             style={{
                               fontFamily: 'Bodoni Moda, serif',
                             }}
@@ -284,7 +284,7 @@ export default function ServicesSection() {
                                   ? 'noopener noreferrer'
                                   : undefined
                               }
-                              className="group mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#141A32] px-5 py-3.5 text-[9px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-[#1d2642] sm:mt-7 sm:w-fit sm:gap-3 sm:px-6 sm:py-4 sm:text-[10px] sm:tracking-[0.18em] lg:mt-8"
+                              className="group mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#141A32] px-5 py-3 text-[9px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-[#1d2642] sm:mt-6 sm:w-fit sm:gap-3 sm:px-6 sm:py-3.5 sm:text-[10px] sm:tracking-[0.18em] lg:mt-5 xl:mt-6 2xl:mt-8"
                             >
                               {service.cta}
 
@@ -299,16 +299,16 @@ export default function ServicesSection() {
                           MIDDLE COLUMN
                       ================================================= */}
 
-                        <div className="order-2 flex flex-col justify-start py-2 lg:order-none lg:col-span-4 lg:max-h-full lg:overflow-y-auto lg:border-l lg:border-r lg:border-[#c6c6ce] lg:px-8 lg:py-6 lg:scrollbar-hide xl:px-14">
+                        <div className="order-2 flex flex-col justify-start py-2 lg:order-none lg:col-span-4 lg:max-h-full lg:overflow-y-auto lg:border-l lg:border-r lg:border-[#c6c6ce] lg:px-5 lg:py-2 xl:px-7 xl:py-3 2xl:px-12 2xl:py-6">
                           {/* TITLE */}
 
-                          <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-primary sm:text-[10px] sm:tracking-[0.22em]">
+                          <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-primary sm:text-[9.5px] sm:tracking-[0.22em] 2xl:text-[10px]">
                             {service.title}
                           </span>
 
                           {/* DESCRIPTION / PROBLEM */}
 
-                          <p className="mt-3 text-[12px] leading-[1.5] text-[#62626a] sm:mt-4 sm:text-[14px] sm:leading-[1.65] md:text-[15px] lg:mt-5">
+                          <p className="mt-2 text-[11px] leading-[1.45] text-[#62626a] sm:mt-3 sm:text-[12px] sm:leading-[1.5] md:text-[13px] lg:mt-2 xl:mt-2.5 2xl:mt-4 2xl:text-[14px]">
                             {service.description || service.problem}
                           </p>
 
@@ -317,22 +317,22 @@ export default function ServicesSection() {
                           {(service.secondaryIdentity || service.identity1) && (
                             <>
                               {(service.secondaryIdentity?.title || service.identity1) && (
-                                <span className="mb-1 mt-2 block text-[8px] font-bold uppercase tracking-[0.18em] text-[#141A32] sm:mb-3 sm:text-[10px] sm:tracking-[0.22em]">
+                                <span className="mb-1 mt-2 block text-[8px] font-bold uppercase tracking-[0.18em] text-[#141A32] sm:mb-2 sm:text-[9px] sm:tracking-[0.22em] 2xl:mb-2.5 2xl:text-[10px]">
                                   {service.secondaryIdentity?.title || service.identity1}
                                 </span>
                               )}
 
-                              <div className="space-y-2 sm:space-y-2.5 mt-2 lg:space-y-3">
+                              <div className="mt-1 space-y-1 sm:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2.5">
                                 {(service.secondaryIdentity?.points || service.points2)?.map(
                                   (point) => (
-                                    <div key={point} className="flex items-start gap-2 sm:gap-3">
-                                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#e9c176] text-[#141A32] sm:h-5 sm:w-5">
-                                        <span className="material-symbols-outlined text-[9px] sm:text-[12px]">
+                                    <div key={point} className="flex items-start gap-2 sm:gap-2.5">
+                                      <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#e9c176] text-[#141A32] sm:h-4 sm:w-4 2xl:h-5 2xl:w-5">
+                                        <span className="material-symbols-outlined text-[8px] sm:text-[10px] 2xl:text-[12px]">
                                           check
                                         </span>
                                       </span>
 
-                                      <span className="text-[10px] leading-[1.35] text-[#46464d] sm:text-[12px] sm:leading-[1.4] md:text-[13px]">
+                                      <span className="text-[9.5px] leading-tight text-[#46464d] sm:text-[11px] sm:leading-snug md:text-[11.5px] 2xl:text-[13px]">
                                         {point.replace('✓ ', '')}
                                       </span>
                                     </div>
@@ -344,40 +344,56 @@ export default function ServicesSection() {
 
                           {/* GOLD DIVIDER */}
 
-                          <div className="my-4 h-px w-10 bg-[#e9c176] sm:my-5 sm:w-16 lg:my-6" />
+                          <div className="my-2.5 h-px w-10 bg-[#e9c176] sm:my-3 sm:w-14 lg:my-2.5 xl:my-3 2xl:my-5" />
 
                           {/* PRIMARY IDENTITY (e.g. "Key Takeaways") */}
 
-                          {(service.primaryIdentity || service.identity) && (
-                            <>
-                              <span className="mb-1 mt-2 block text-[8px] font-bold uppercase tracking-[0.18em] text-[#141A32] sm:mb-3 sm:mt-3 sm:text-[10px] sm:tracking-[0.22em] lg:mt-3">
-                                {service.primaryIdentity?.title || service.identity}
-                              </span>
+                          {(() => {
+                            const points = service.primaryIdentity?.points || service.points || [];
+                            if (
+                              !points.length &&
+                              !service.primaryIdentity?.title &&
+                              !service.identity
+                            ) {
+                              return null;
+                            }
+                            const isMultiColumn = points.length > 5;
 
-                              <div className="space-y-2 sm:space-y-2.5 lg:space-y-3">
-                                {(service.primaryIdentity?.points || service.points)?.map(
-                                  (point) => (
-                                    <div key={point} className="flex items-start gap-2 sm:gap-3">
-                                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#e9c176] text-[#141A32] sm:h-5 sm:w-5">
-                                        <span className="material-symbols-outlined text-[9px] sm:text-[12px]">
+                            return (
+                              <>
+                                <span className="mb-1 mt-1 block text-[8px] font-bold uppercase tracking-[0.18em] text-[#141A32] sm:mb-2 sm:text-[9px] sm:tracking-[0.22em] 2xl:mb-2.5 2xl:text-[10px]">
+                                  {service.primaryIdentity?.title || service.identity}
+                                </span>
+
+                                <div
+                                  className={
+                                    isMultiColumn
+                                      ? 'grid grid-cols-1 gap-x-3 gap-y-1 sm:grid-cols-2 sm:gap-y-1.5 lg:gap-y-1.5 xl:gap-y-2'
+                                      : 'space-y-1 sm:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2.5'
+                                  }
+                                >
+                                  {points.map((point) => (
+                                    <div key={point} className="flex items-start gap-2 sm:gap-2.5">
+                                      <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#e9c176] text-[#141A32] sm:h-4 sm:w-4 2xl:h-5 2xl:w-5">
+                                        <span className="material-symbols-outlined text-[8px] sm:text-[10px] 2xl:text-[12px]">
                                           check
                                         </span>
                                       </span>
 
-                                      <span className="text-[10px] leading-[1.35] text-[#46464d] sm:text-[12px] sm:leading-[1.4] md:text-[13px]">
+                                      <span className="text-[9.5px] leading-tight text-[#46464d] sm:text-[11px] sm:leading-snug md:text-[11.5px] 2xl:text-[13px]">
                                         {point}
                                       </span>
                                     </div>
-                                  ),
-                                )}
-                              </div>
-                            </>
-                          )}
+                                  ))}
+                                </div>
+                              </>
+                            );
+                          })()}
 
                           {/* Optional title2 */}
 
                           {service.title2 && (
-                            <p className="mt-6 text-[11px] leading-[1.5] text-[#62626a] sm:mt-7 sm:text-[13px] sm:leading-[1.6]">
+                            <p className="mt-4 text-[10px] leading-[1.45] text-[#62626a] sm:mt-5 sm:text-[12px] sm:leading-[1.5] 2xl:mt-6 2xl:text-[13px]">
                               {service.title2}
                             </p>
                           )}
@@ -387,10 +403,10 @@ export default function ServicesSection() {
                           RIGHT COLUMN
                       ================================================= */}
 
-                        <div className="order-3 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:pl-8 xl:pl-14">
+                        <div className="order-3 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:pl-6 xl:pl-8 2xl:pl-14">
                           {/* IMAGE */}
 
-                          <div className="relative h-36 w-full overflow-hidden border border-[#c6c6ce] bg-[#fbf9f8] sm:h-48 md:h-56 lg:h-[330px] xl:h-[380px]">
+                          <div className="relative h-36 w-full overflow-hidden border border-[#c6c6ce] bg-[#fbf9f8] sm:h-48 md:h-56 lg:h-[190px] xl:h-[220px] 2xl:h-[320px]">
                             <Image
                               src={service.image}
                               alt={`${service.title} business solution`}
@@ -402,9 +418,9 @@ export default function ServicesSection() {
 
                             <div className="absolute inset-0 bg-gradient-to-t from-[#141A32]/50 via-transparent to-transparent" />
 
-                            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between sm:bottom-5 sm:left-5 sm:right-5">
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e9c176] text-[#141A32] sm:h-10 sm:w-10">
-                                <span className="material-symbols-outlined text-[15px] sm:text-[18px]">
+                            <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between sm:bottom-4 sm:left-4 sm:right-4 2xl:bottom-5 2xl:left-5 2xl:right-5">
+                              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e9c176] text-[#141A32] sm:h-8 sm:w-8 2xl:h-10 2xl:w-10">
+                                <span className="material-symbols-outlined text-[13px] sm:text-[15px] 2xl:text-[18px]">
                                   north_east
                                 </span>
                               </div>
@@ -413,27 +429,27 @@ export default function ServicesSection() {
 
                           {/* INFORMATION */}
 
-                          <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 lg:mt-5 lg:gap-4">
+                          <div className="mt-2.5 grid grid-cols-2 gap-2 sm:mt-3 sm:gap-2.5 lg:mt-3 lg:gap-3 xl:mt-3.5 xl:gap-3.5 2xl:mt-5 2xl:gap-4">
                             {/* PERFECT FOR */}
 
-                            <div className="border border-[#c6c6ce] bg-[#fbf9f8] p-3 sm:p-4 lg:p-5">
-                              <span className="block text-[7px] font-bold uppercase tracking-[0.12em] text-[#8a8a91] sm:text-[8px] sm:tracking-[0.16em]">
+                            <div className="border border-[#c6c6ce] bg-[#fbf9f8] p-2.5 sm:p-3 lg:p-3 xl:p-3.5 2xl:p-5">
+                              <span className="block text-[7px] font-bold uppercase tracking-[0.12em] text-[#8a8a91] sm:text-[8px] sm:tracking-[0.16em] 2xl:text-[8.5px]">
                                 Perfect For
                               </span>
 
-                              <p className="mt-1 text-[9px] font-medium leading-[1.4] text-[#141A32] sm:mt-2 sm:text-[10px] lg:text-[12px]">
+                              <p className="mt-1 text-[9px] font-medium leading-snug text-[#141A32] sm:mt-1.5 sm:text-[10px] lg:text-[10.5px] xl:text-[11px] 2xl:text-[12px]">
                                 {service.perfectFor || service.audience}
                               </p>
                             </div>
 
                             {/* BUSINESS PROOF */}
 
-                            <div className="border border-[#c6c6ce] bg-[#fbf9f8] p-3 sm:p-4 lg:p-5">
-                              <span className="block text-[7px] font-bold uppercase tracking-[0.12em] text-[#8a8a91] sm:text-[8px] sm:tracking-[0.16em]">
+                            <div className="border border-[#c6c6ce] bg-[#fbf9f8] p-2.5 sm:p-3 lg:p-3 xl:p-3.5 2xl:p-5">
+                              <span className="block text-[7px] font-bold uppercase tracking-[0.12em] text-[#8a8a91] sm:text-[8px] sm:tracking-[0.16em] 2xl:text-[8.5px]">
                                 Business Proof
                               </span>
 
-                              <p className="mt-2 text-[9px] font-bold leading-[1.4] text-[#141A32] sm:text-[10px] lg:text-[12px]">
+                              <p className="mt-1 text-[9px] font-bold leading-snug text-[#141A32] sm:mt-1.5 sm:text-[10px] lg:text-[10.5px] xl:text-[11px] 2xl:text-[12px]">
                                 {service.businessProof || service.proof}
                               </p>
                             </div>
