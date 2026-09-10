@@ -117,7 +117,7 @@ const endX = g4[g4.length - 1];
 /*
  * Vertical bus height.
  * Set vBottom = 244 (the bottom-most horizontal circuit line)
- * and vTop = 38 so the bus lines leave room for the Clarity label above them.
+ * and vTop = 50 so the bus lines leave room for the Clarity label above them.
  */
 const vTop = 50;
 const vBottom = 244;
@@ -188,7 +188,7 @@ const goldCircuitPaths = [
    HERO SCRIBBLE
    ============================================================ */
 
-export default function HeroScribble({ className = '' }: { className?: string } = {}) {
+export default function HeroScribble() {
   const scribbles = useMemo(
     () => Array.from({ length: 50 }, (_, index) => createScribble(index)),
     [],
@@ -196,7 +196,16 @@ export default function HeroScribble({ className = '' }: { className?: string } 
 
   return (
     <div
-      className={`relative w-full max-w-[1050px] aspect-[610/270] select-none overflow-hidden border-none outline-none ${className}`}
+      className="
+        relative
+        w-full
+        max-w-[1050px]
+        aspect-[610/270]
+        select-none
+        overflow-hidden
+        border-none
+        outline-none
+      "
     >
       {/* CHAOS LABEL */}
       <div className="absolute top-2 left-[7%] sm:left-[9%] z-10 flex items-center gap-1 sm:gap-1.5 text-[#172039]">
