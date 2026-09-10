@@ -242,15 +242,13 @@ export default function ServicesSection() {
                     <span className="text-[8px] uppercase tracking-[0.2em] text-[#8a8a91] sm:text-[10px] sm:tracking-[0.25em]">
                       Service
                     </span>
-
-                    <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-3" />
                   </div>
 
                   {/* =================================================
                     MAIN CONTENT
                 ================================================= */}
 
-                  <div className="w-full px-5 pb-14 pt-16 sm:px-8 sm:pb-14 sm:pt-20 md:px-10 lg:h-full lg:px-16 lg:pt-14 lg:pb-6 xl:pt-16 xl:pb-8 2xl:pt-20 2xl:pb-12">
+                  <div className="w-full px-5 pb-6 pt-8 sm:px-8 sm:pb-6 sm:pt-10 md:px-10 lg:h-full lg:px-16 lg:pb-4 lg:pt-8 xl:pb-5 xl:pt-9 2xl:pb-6 2xl:pt-10">
                     <div className="mx-auto flex w-full max-w-[1600px] items-start lg:h-full lg:items-center">
                       <div className="grid w-full grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-0">
                         {/* =================================================
@@ -264,7 +262,7 @@ export default function ServicesSection() {
 
                         <div className="order-1 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:justify-start lg:pr-6 xl:pr-10 2xl:pr-20">
                           <h3
-                            className="mb-2 text-[34px] font-medium leading-[0.98] text-primary sm:mt-4 sm:text-[40px] md:text-[48px] lg:mt-3 lg:text-[38px] xl:mt-4 xl:text-[44px] 2xl:mt-5 2xl:text-[52px]"
+                            className="mb-2 text-[34px] font-medium leading-[0.98] text-primary sm:text-[40px] md:text-[48px] lg:text-[38px] xl:text-[44px] 2xl:text-[52px]"
                             style={{
                               fontFamily: 'Bodoni Moda, serif',
                             }}
