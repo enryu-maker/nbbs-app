@@ -1,5 +1,5 @@
 import { apiClient } from './client.api';
-import { CREDIBILITY_ENDPOINT } from '@/src/const';
+import { CREDIBILITY_ENDPOINT, VISITORS_ENDPOINT } from '@/src/const';
 import { type CredibilityMetric, type PaginatedResponse } from '@/src/types';
 
 /**
@@ -20,4 +20,25 @@ export async function fetchCredibilityMetrics(): Promise<CredibilityMetric[]> {
   }
 
   return [];
+}
+
+/**
+ * Live website visitor count. Counts this browser once (POST), afterwards only reads (GET).
+ * /api/nbbs/visitors/
+ */
+export async function fetchVisitorCount(): Promise<number> {
+  const KEY = 'nbbs-visit-counted';
+  let counted = false;
+  try {
+    counted = localStorage.getItem(KEY) === '1';
+  } catch {}
+
+  const { count } = await apiClient<{ count: number }>(VISITORS_ENDPOINT, {
+    method: counted ? 'GET' : 'POST',
+  });
+
+  try {
+    localStorage.setItem(KEY, '1');
+  } catch {}
+  return count;
 }

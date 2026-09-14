@@ -1,6 +1,54 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchVisitorCount } from '@/src/apis';
 import { useCredibility } from '@/src/hooks';
+
+// Animates the first number in a value like "350+", "40%", "10,000+ Visitors" from 0 once it scrolls into view.
+function CountUp({ value, className }: { value: string; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [text, setText] = useState(value);
+
+  useEffect(() => {
+    const match = value.match(/\d[\d,]*/);
+    const el = ref.current;
+    if (!match || !el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setText(value);
+      return;
+    }
+
+    const target = Number(match[0].replace(/,/g, ''));
+    const format = (n: number) =>
+      value.replace(match[0], match[0].includes(',') ? n.toLocaleString('en-IN') : String(n));
+    setText(format(0));
+
+    let frame = 0;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min((now - start) / 1500, 1);
+        setText(format(Math.round(target * (1 - (1 - t) ** 3))));
+        if (t < 1) frame = requestAnimationFrame(tick);
+      };
+      frame = requestAnimationFrame(tick);
+    });
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [value]);
+
+  return (
+    <span ref={ref} className={className} aria-label={value}>
+      {text}
+    </span>
+  );
+}
 
 interface LayoutConfig {
   containerClass: string;
@@ -49,9 +97,19 @@ function getLayoutConfig(count: number): LayoutConfig {
 }
 
 export default function StatsSection() {
-  const { stats } = useCredibility();
+  const { stats: cmsStats } = useCredibility();
+  const { data: visitorCount } = useQuery({
+    queryKey: ['visitors'],
+    queryFn: fetchVisitorCount,
+    staleTime: Infinity,
+  });
 
-  if (!stats || stats.length === 0) {
+  const stats =
+    visitorCount === undefined
+      ? cmsStats
+      : [...cmsStats, { value: visitorCount.toLocaleString('en-IN'), label: 'Website Visitors' }];
+
+  if (stats.length === 0) {
     return null;
   }
 
@@ -69,7 +127,10 @@ export default function StatsSection() {
               ${getItemBorder(index)}
             `}
           >
-            <span className="mb-2 text-4xl font-display text-secondary">{value}</span>
+            <CountUp
+              value={value}
+              className="mb-2 text-4xl font-display text-secondary tabular-nums"
+            />
 
             <span className="text-xs font-sans font-medium uppercase tracking-widest text-white">
               {label}
