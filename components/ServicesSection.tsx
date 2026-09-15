@@ -25,13 +25,20 @@ export default function ServicesSection() {
     const targetId = `service-${targetService?.number}`;
 
     if (trigger && services.length > 1) {
-      const totalDuration = services.length - 1;
-      const buffer = 0.15; // stay clear of the next card's reveal
+      // The first card is already visible.
+      // Only the remaining cards need animation.
+      const totalDuration = Math.max(services.length - 1, 1);
+
+      const buffer = 0.15;
       const targetTime = Math.max(targetIndex - buffer, 0);
-      const progress = targetTime / totalDuration;
+      const progress = Math.min(targetTime / totalDuration, 1);
+
       const targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
 
-      window.scrollTo({ top: targetScroll, behavior: 'auto' });
+      window.scrollTo({
+        top: targetScroll,
+        behavior: 'auto',
+      });
     } else {
       document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -50,32 +57,56 @@ export default function ServicesSection() {
           return;
         }
 
-        // Initial position of all cards
+        // INITIAL POSITION
+
+        // All cards start below the visible service area.
         gsap.set(sections, {
           yPercent: 100,
         });
 
-        // First card stays visible
+        // First card is immediately visible.
         gsap.set(sections[0], {
           yPercent: 0,
         });
 
+        // SERVICES PINNED TIMELINE
+
+        const remainingCards = Math.max(sections.length - 1, 1);
+
         const timeline = gsap.timeline({
           scrollTrigger: {
             id: 'services-pin',
+
             trigger: servicesSectionRef.current,
-            start: 'top top',
-            end: `+=${sections.length * 100}%`,
+
+            // Keep the pinned service card below the header.
+            // This prevents the card from going underneath the header
+            // when the animation starts.
+            start: 'top 80px',
+
+            // The first card is already visible, so we only need
+            // one scroll segment for every remaining card.
+            end: `+=${remainingCards * 100}%`,
+
             pin: true,
+
+            // Keeps the page flow correct after the pinned section.
             pinSpacing: true,
+
             scrub: 1,
+
             anticipatePin: 1,
+
             invalidateOnRefresh: true,
+
             fastScrollEnd: true,
           },
         });
 
+        // CARD REVEAL ANIMATION
+
         sections.forEach((section, index) => {
+          // First card is already visible.
           if (index === 0) return;
 
           timeline.to(
@@ -89,45 +120,54 @@ export default function ServicesSection() {
           );
         });
 
-        // gsap.matchMedia cleanup: reset inline styles this breakpoint set
-        // so cards look right in normal flow if the viewport is resized
-        // down past 1024px without a full remount.
+        // gsap.matchMedia cleanup
         return () => {
-          gsap.set(sections, { clearProps: 'transform' });
+          gsap.set(sections, {
+            clearProps: 'transform',
+          });
         };
       });
 
       ScrollTrigger.refresh();
     }, servicesSectionRef);
 
-    // Service card images/fonts finishing after mount change this
-    // section's height, which silently invalidates the pin's start/end
-    // math and is the main cause of the white gap / mistimed transitions
-    // when scrolling. `window.load` only fires once per full page load,
-    // so it never fires again after a client-side (Next.js) navigation —
-    // watch the section itself instead so any height change (image load,
-    // font swap, route change, content update) triggers a re-measure.
-    const handleLoad = () => ScrollTrigger.refresh();
+    // REFRESH AFTER IMAGES / FONTS / CONTENT LOAD
+
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+
     window.addEventListener('load', handleLoad);
+
     if (document.fonts?.ready) {
-      document.fonts.ready.then(() => ScrollTrigger.refresh());
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
     }
 
+    // WATCH SERVICES SECTION SIZE
+
     let resizeObserver: ResizeObserver | undefined;
+
     if (servicesSectionRef.current && typeof ResizeObserver !== 'undefined') {
       let rafId = 0;
+
       resizeObserver = new ResizeObserver(() => {
-        // Coalesce bursts of resize notifications (e.g. several images
-        // finishing at once) into a single refresh per frame.
         cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+        rafId = requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+        });
       });
+
       resizeObserver.observe(servicesSectionRef.current);
     }
 
     return () => {
       window.removeEventListener('load', handleLoad);
+
       resizeObserver?.disconnect();
+
       ctx.revert();
     };
   }, [services]);
@@ -137,9 +177,7 @@ export default function ServicesSection() {
       id="services"
       className="relative isolate z-0 bg-[#fbf9f8] text-[#1a1b22] antialiased font-sans"
     >
-      {/* =========================================================
-          HERO
-      ========================================================= */}
+      {/* HERO */}
 
       <section className="relative overflow-hidden bg-[#141A32] py-14 sm:py-16 md:py-20">
         {/* Grid Background */}
@@ -225,18 +263,28 @@ export default function ServicesSection() {
         </div>
       </section>
 
-      {/* =========================================================
-          SOLUTIONS
-      ========================================================= */}
+      {/* SOLUTIONS */}
 
       {services.length > 0 && (
         <section id="solutions" className="bg-[#fbf9f8]">
-          {/* =========================================================
-              GSAP SERVICES
-          ========================================================= */}
+          {/* GSAP SERVICES */}
 
           <div ref={servicesSectionRef} className="services-scroll relative w-full">
-            <div className="relative overflow-visible lg:h-[75vh] lg:min-h-[500px] lg:max-h-[600px] xl:h-[78vh] xl:min-h-[540px] xl:max-h-[640px] 2xl:h-[80vh] 2xl:min-h-[580px] 2xl:max-h-[700px] lg:overflow-hidden">
+            {/*
+              IMPORTANT:
+              The services stage now uses the viewport height minus the
+              header height. This gives every card the complete visible
+              services area and prevents the next section from appearing
+              too far below.
+            */}
+            <div
+              className="
+                relative w-full overflow-visible
+                lg:h-[calc(100svh-80px)]
+                lg:min-h-[520px]
+                lg:overflow-hidden
+              "
+            >
               {services.map((service, index) => (
                 <article
                   key={service.number}
@@ -250,9 +298,7 @@ export default function ServicesSection() {
 
                   <div className="absolute left-0 right-0 top-0 h-0.5 bg-[#e9c176] sm:h-0.75" />
 
-                  {/* =================================================
-                    TOP LEFT
-                ================================================= */}
+                  {/* TOP LEFT */}
 
                   <div className="absolute left-5 top-5 z-20 sm:left-8 sm:top-7 md:left-10 md:top-8 lg:left-16 lg:top-6">
                     <span className="text-[8px] uppercase tracking-[0.2em] text-[#8a8a91] sm:text-[10px] sm:tracking-[0.25em]">
@@ -260,21 +306,12 @@ export default function ServicesSection() {
                     </span>
                   </div>
 
-                  {/* =================================================
-                    MAIN CONTENT
-                ================================================= */}
+                  {/* MAIN CONTENT */}
 
                   <div className="w-full px-5 pb-6 pt-8 sm:px-8 sm:pb-6 sm:pt-10 md:px-10 lg:h-full lg:px-16 lg:py-4 xl:py-5 2xl:py-6">
                     <div className="mx-auto flex w-full max-w-[1600px] items-start lg:h-full lg:items-center">
                       <div className="grid w-full grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-0">
-                        {/* =================================================
-                          LEFT COLUMN — `order-1` pins it to the top of
-                          the mobile stack. On lg+ it keeps its original
-                          side-by-side width (col-span-4), just top-
-                          aligned (`lg:justify-start` instead of
-                          center) so the heading + CTA sit at the top
-                          of the column instead of vertically centered.
-                      ================================================= */}
+                        {/* LEFT COLUMN */}
 
                         <div className="order-1 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:justify-start lg:pr-6 xl:pr-10 2xl:pr-20">
                           <h3
@@ -285,6 +322,7 @@ export default function ServicesSection() {
                           >
                             {service.category}
                           </h3>
+
                           <span className="text-[8px] font-bold tracking-[0.2em] text-secondary sm:text-[10px] sm:tracking-[0.25em]">
                             {service.subcategory || service.title1}
                           </span>
@@ -309,9 +347,7 @@ export default function ServicesSection() {
                           )}
                         </div>
 
-                        {/* =================================================
-                          MIDDLE COLUMN
-                      ================================================= */}
+                        {/* MIDDLE COLUMN */}
 
                         <div className="order-2 flex flex-col justify-start py-2 lg:order-none lg:col-span-4 lg:max-h-full lg:overflow-y-auto lg:border-l lg:border-r lg:border-[#c6c6ce] lg:px-5 lg:py-2 xl:px-7 xl:py-3 2xl:px-12 2xl:py-6">
                           {/* TITLE */}
@@ -326,7 +362,7 @@ export default function ServicesSection() {
                             {service.description || service.problem}
                           </p>
 
-                          {/* SECONDARY IDENTITY (e.g. "We Identify") */}
+                          {/* SECONDARY IDENTITY */}
 
                           {(service.secondaryIdentity || service.identity1) && (
                             <>
@@ -360,10 +396,11 @@ export default function ServicesSection() {
 
                           <div className="my-2.5 h-px w-10 bg-[#e9c176] sm:my-3 sm:w-14 lg:my-2.5 xl:my-3 2xl:my-5" />
 
-                          {/* PRIMARY IDENTITY (e.g. "Key Takeaways") */}
+                          {/* PRIMARY IDENTITY */}
 
                           {(() => {
                             const points = service.primaryIdentity?.points || service.points || [];
+
                             if (
                               !points.length &&
                               !service.primaryIdentity?.title &&
@@ -371,6 +408,7 @@ export default function ServicesSection() {
                             ) {
                               return null;
                             }
+
                             const isMultiColumn = points.length > 5;
 
                             return (
@@ -383,7 +421,7 @@ export default function ServicesSection() {
                                   className={
                                     isMultiColumn
                                       ? 'grid grid-cols-1 gap-x-3 gap-y-1 sm:grid-cols-2 sm:gap-y-1.5 lg:gap-y-1.5 xl:gap-y-2'
-                                      : 'space-y-1 sm:space-y-1.5 lg:space-y-1.5 xl:space-y-2 2xl:space-y-2.5'
+                                      : 'space-y-1 sm:space-y-1.5 lg:space-y-2 2xl:space-y-2.5'
                                   }
                                 >
                                   {points.map((point) => (
@@ -413,9 +451,7 @@ export default function ServicesSection() {
                           )}
                         </div>
 
-                        {/* =================================================
-                          RIGHT COLUMN
-                      ================================================= */}
+                        {/* RIGHT COLUMN */}
 
                         <div className="order-3 flex flex-col justify-center py-2 lg:order-none lg:col-span-4 lg:pl-6 xl:pl-8 2xl:pl-14">
                           {/* IMAGE */}
