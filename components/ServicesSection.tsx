@@ -102,16 +102,32 @@ export default function ServicesSection() {
 
     // Service card images/fonts finishing after mount change this
     // section's height, which silently invalidates the pin's start/end
-    // math and is the main cause of the neighbouring section flashing
-    // through it when scrolling back up fast. Re-measure once loaded.
+    // math and is the main cause of the white gap / mistimed transitions
+    // when scrolling. `window.load` only fires once per full page load,
+    // so it never fires again after a client-side (Next.js) navigation —
+    // watch the section itself instead so any height change (image load,
+    // font swap, route change, content update) triggers a re-measure.
     const handleLoad = () => ScrollTrigger.refresh();
     window.addEventListener('load', handleLoad);
     if (document.fonts?.ready) {
       document.fonts.ready.then(() => ScrollTrigger.refresh());
     }
 
+    let resizeObserver: ResizeObserver | undefined;
+    if (servicesSectionRef.current && typeof ResizeObserver !== 'undefined') {
+      let rafId = 0;
+      resizeObserver = new ResizeObserver(() => {
+        // Coalesce bursts of resize notifications (e.g. several images
+        // finishing at once) into a single refresh per frame.
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
+      resizeObserver.observe(servicesSectionRef.current);
+    }
+
     return () => {
       window.removeEventListener('load', handleLoad);
+      resizeObserver?.disconnect();
       ctx.revert();
     };
   }, [services]);
