@@ -3,11 +3,8 @@ import { ArrowRight } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <section
-      id="home"
-      className="mt-[94px] w-full overflow-hidden border-y border-black/5 bg-[#fbf9f8] px-2 sm:mt-12 sm:px-4 md:mt-12 md:px-2"
-    >
-      <div className="mx-auto w-full max-w-container-max px-margin-mobile py-unit-lg sm:py-unit-xl">
+    <section id="home" className="mt-20 w-full overflow-hidden bg-[#fbf9f8] px-2 sm:px-4 md:px-2">
+      <div className="mx-auto w-full max-w-container-max px-margin-mobile pt-unit-sm pb-unit-lg sm:pt-unit-md sm:pb-unit-xl">
         <div className="grid grid-cols-1 items-center gap-unit-lg md:grid-cols-2 md:gap-x-unit-md">
           {/* EYEBROW */}
           <div className="col-span-full mb-unit-lg grid w-full grid-cols-[1fr_auto_1fr] items-center gap-unit-sm sm:mb-unit-xl">
