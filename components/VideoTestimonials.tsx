@@ -393,9 +393,9 @@ export function VideoTestimonials() {
    * It's safe here because no hooks are declared
    * below this line.
    */
-  if (realCount === 0) {
-    return null;
-  }
+  // if (realCount === 0) {
+  //   return null;
+  // }
 
   return (
     <section id="video-testimonials" className="video-testi-bg">

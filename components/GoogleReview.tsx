@@ -179,7 +179,7 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
   );
 }
 
-export function VideoTestimonials() {
+export default function VideoTestimonials() {
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
   const trackRef = useRef<HTMLDivElement>(null);
