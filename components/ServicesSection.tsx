@@ -2,12 +2,35 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useServices } from '@/src/hooks';
 
 export default function ServicesSection() {
   const { services } = useServices();
   const servicesSectionRef = useRef<HTMLDivElement | null>(null);
+
+  // A card taller than the screen would be covered before its bottom is seen.
+  // Stick it at min(80px header, viewport - card height): short cards stick
+  // under the header, tall ones scroll until their bottom is visible, then stick.
+  useEffect(() => {
+    const stage = servicesSectionRef.current;
+    if (!stage) return;
+
+    const panels = Array.from(stage.children) as HTMLElement[];
+    const update = () => {
+      for (const panel of panels) {
+        panel.style.top = `${Math.min(80, window.innerHeight - panel.offsetHeight)}px`;
+      }
+    };
+
+    const observer = new ResizeObserver(update);
+    panels.forEach((panel) => observer.observe(panel));
+    window.addEventListener('resize', update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, [services]);
 
   // Sticky cards report their stuck position, so scrollIntoView can't reach
   // them. Compute the card's in-flow top from the heights of the cards above.
@@ -20,7 +43,7 @@ export default function ServicesSection() {
     const panels = Array.from(stage.children) as HTMLElement[];
     let top = stage.getBoundingClientRect().top + window.scrollY;
     for (const panel of panels.slice(0, targetIndex)) {
-      top += panel.offsetHeight + parseFloat(getComputedStyle(panel).marginBottom);
+      top += panel.offsetHeight;
     }
 
     window.scrollTo({ top: top - 80, behavior: 'smooth' });
@@ -135,7 +158,7 @@ export default function ServicesSection() {
                 <article
                   key={service.number}
                   id={`service-${service.number}`}
-                  className="service-panel relative mb-10 w-full overflow-visible bg-[#EEF0F3] last:mb-0 lg:sticky lg:top-20 lg:mb-0 lg:overflow-hidden"
+                  className="service-panel sticky top-20 w-full overflow-hidden bg-[#EEF0F3]"
                   style={{
                     zIndex: index + 1,
                   }}

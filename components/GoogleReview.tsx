@@ -103,9 +103,10 @@ export default function GoogleReview() {
     return null;
   }
 
-  // Ensure each track has enough cards (at least 10) so it comfortably exceeds any screen width
-  // allowing a completely seamless, continuous infinite loop without blank gaps or snapping.
-  const repeatCount = Math.max(2, Math.ceil(10 / baseReviews.length));
+  // Each track needs just enough cards to exceed the widest screen (7 × 380px ≈ 2660px).
+  // More than that only widens the animated layer; very wide layers get rasterized in
+  // tiles, and tiles not painted in time flash as white blocks.
+  const repeatCount = Math.ceil(7 / baseReviews.length);
   const displayReviews = Array.from({ length: repeatCount }, () => baseReviews).flat();
 
   return (
@@ -181,7 +182,6 @@ export default function GoogleReview() {
             flex
             w-max
             items-stretch
-            will-change-transform
           "
         >
           {/* =================================================
