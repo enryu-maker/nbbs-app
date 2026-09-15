@@ -272,15 +272,14 @@ export default function ServicesSection() {
           <div ref={servicesSectionRef} className="services-scroll relative w-full">
             {/*
               IMPORTANT:
-              The services stage uses the viewport height minus the header
-              height, capped at 680px so tall screens don't leave large empty
-              space above and below the card content.
+              On desktop every card sits in the same grid cell, so the stage
+              is exactly as tall as the tallest card's content — no empty
+              space, and nothing gets clipped.
             */}
             <div
               className="
                 relative w-full overflow-visible
-                lg:h-[min(calc(100svh-80px),680px)]
-                lg:min-h-[520px]
+                lg:grid
                 lg:overflow-hidden
               "
             >
@@ -288,7 +287,7 @@ export default function ServicesSection() {
                 <article
                   key={service.number}
                   id={`service-${service.number}`}
-                  className="service-panel relative mb-10 w-full overflow-visible bg-[#EEF0F3] last:mb-0 lg:absolute lg:inset-0 lg:mb-0 lg:h-full lg:overflow-hidden"
+                  className="service-panel relative mb-10 w-full overflow-visible bg-[#EEF0F3] last:mb-0 lg:mb-0 lg:overflow-hidden lg:[grid-area:1/1]"
                   style={{
                     zIndex: index + 1,
                   }}
@@ -307,7 +306,7 @@ export default function ServicesSection() {
 
                   {/* MAIN CONTENT */}
 
-                  <div className="w-full px-5 pb-6 pt-8 sm:px-8 sm:pb-6 sm:pt-10 md:px-10 lg:h-full lg:px-16 lg:py-4 xl:py-5 2xl:py-6">
+                  <div className="w-full px-5 pb-6 pt-8 sm:px-8 sm:pb-6 sm:pt-10 md:px-10 lg:h-full lg:px-16 lg:pb-10 lg:pt-14">
                     <div className="mx-auto flex w-full max-w-[1600px] items-start lg:h-full lg:items-center">
                       <div className="grid w-full grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-12 lg:gap-0">
                         {/* LEFT COLUMN */}
