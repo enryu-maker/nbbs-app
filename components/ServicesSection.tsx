@@ -272,15 +272,14 @@ export default function ServicesSection() {
           <div ref={servicesSectionRef} className="services-scroll relative w-full">
             {/*
               IMPORTANT:
-              The services stage now uses the viewport height minus the
-              header height. This gives every card the complete visible
-              services area and prevents the next section from appearing
-              too far below.
+              The services stage uses the viewport height minus the header
+              height, capped at 680px so tall screens don't leave large empty
+              space above and below the card content.
             */}
             <div
               className="
                 relative w-full overflow-visible
-                lg:h-[calc(100svh-80px)]
+                lg:h-[min(calc(100svh-80px),680px)]
                 lg:min-h-[520px]
                 lg:overflow-hidden
               "

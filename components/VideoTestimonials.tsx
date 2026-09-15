@@ -1,26 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { videoTestimonials } from '@/lib/video-testimonials';
 
-const THUMB_SEEK_SECONDS = 1.5;
+// Media fragment: the browser paints this frame as the thumbnail itself,
+// fetching only metadata + that frame (no canvas capture, no full preload).
+const THUMB_FRAGMENT = '#t=1.5';
 
-function capturePoster(video: HTMLVideoElement): string | null {
-  if (!video.videoWidth || !video.videoHeight) return null;
-
-  try {
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL('image/jpeg', 0.75);
-  } catch {
-    return null;
-  }
-}
+// The list is rendered 3x; scroll position is kept inside the middle copy so
+// the track feels endless in both directions.
+const COPIES = 3;
 
 interface VideoReelCardProps {
   src: string;
@@ -33,56 +23,26 @@ interface VideoReelCardProps {
 function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardProps) {
   const cardRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const thumbTimeRef = useRef(THUMB_SEEK_SECONDS);
-  const [poster, setPoster] = useState<string | null>(null);
-  const [thumbReady, setThumbReady] = useState(false);
+  const [nearViewport, setNearViewport] = useState(false);
 
+  // Not eager: fetch metadata/thumbnail only once the card is about to scroll in.
   useEffect(() => {
     const card = cardRef.current;
-    const video = videoRef.current;
-    if (!card || !video || poster) return;
+    if (!card || nearViewport) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry?.isIntersecting) return;
-
-        const prepareThumbnail = () => {
-          const target = Math.min(
-            THUMB_SEEK_SECONDS,
-            Math.max(0.5, (video.duration || THUMB_SEEK_SECONDS) * 0.12),
-          );
-          thumbTimeRef.current = target;
-
-          const onSeeked = () => {
-            const dataUrl = capturePoster(video);
-            if (dataUrl) setPoster(dataUrl);
-            setThumbReady(true);
-            video.pause();
-            video.removeEventListener('seeked', onSeeked);
-          };
-
-          video.addEventListener('seeked', onSeeked);
-          video.currentTime = target;
-        };
-
-        if (video.readyState >= 1) {
-          prepareThumbnail();
-        } else {
-          video.preload = 'auto';
-          video.addEventListener('loadedmetadata', prepareThumbnail, {
-            once: true,
-          });
-          video.load();
+        if (entry?.isIntersecting) {
+          setNearViewport(true);
+          observer.disconnect();
         }
-
-        observer.disconnect();
       },
-      { rootMargin: '120px' },
+      { rootMargin: '600px' },
     );
 
     observer.observe(card);
     return () => observer.disconnect();
-  }, [poster]);
+  }, [nearViewport]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -96,28 +56,22 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
     }
 
     video.muted = true;
-
     video.pause();
-    video.currentTime = thumbTimeRef.current;
   }, [isActive]);
-
-  const showPoster = !isActive && poster;
 
   return (
     <article
       ref={cardRef}
-      className={`video-reel-card${isActive ? ' is-playing' : ''}${thumbReady || poster ? ' has-thumb' : ''}`}
+      className={`video-reel-card${isActive ? ' is-playing' : ''}${nearViewport ? ' has-thumb' : ''}`}
     >
       <div className="video-reel-media">
-        {showPoster && <img src={poster} alt="" className="video-reel-poster" aria-hidden />}
         <video
           ref={videoRef}
-          src={src}
+          src={nearViewport ? `${src}${THUMB_FRAGMENT}` : undefined}
           playsInline
           muted
-          preload="none"
+          preload={nearViewport ? 'metadata' : 'none'}
           controls={isActive}
-          className={showPoster ? 'video-reel-video--hidden' : undefined}
           onEnded={onEnded}
         />
         <div className="video-reel-shade" aria-hidden />
@@ -139,9 +93,47 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
   );
 }
 
+// Width of one full copy of the list, gaps included.
+function copyWidth(track: HTMLDivElement) {
+  const first = track.children[0] as HTMLElement | undefined;
+  const nextCopy = track.children[videoTestimonials.length] as HTMLElement | undefined;
+  return first && nextCopy ? nextCopy.offsetLeft - first.offsetLeft : 0;
+}
+
 export function VideoTestimonials() {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeKey, setActiveKey] = useState<string | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+
+  // Start in the middle copy.
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (track) track.scrollLeft = copyWidth(track);
+  }, []);
+
+  // Once scrolling settles, jump back into the middle copy. Skipped while a
+  // video plays, since the jump would swap the playing card for a paused clone.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let timer: ReturnType<typeof setTimeout>;
+    const recenter = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (activeKey) return;
+        const width = copyWidth(track);
+        if (!width) return;
+        if (track.scrollLeft < width * 0.5) track.scrollLeft += width;
+        else if (track.scrollLeft > width * 1.5) track.scrollLeft -= width;
+      }, 150);
+    };
+
+    track.addEventListener('scroll', recenter, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      track.removeEventListener('scroll', recenter);
+    };
+  }, [activeKey]);
 
   function scrollReels(direction: 'left' | 'right') {
     const track = trackRef.current;
@@ -179,16 +171,21 @@ export function VideoTestimonials() {
         </button>
 
         <div className="video-reels-track" ref={trackRef}>
-          {videoTestimonials.map((item) => (
-            <VideoReelCard
-              key={item.id}
-              src={item.src}
-              label={item.label}
-              isActive={activeId === item.id}
-              onPlay={() => setActiveId(item.id)}
-              onEnded={() => setActiveId(null)}
-            />
-          ))}
+          {Array.from({ length: COPIES }, (_, copy) =>
+            videoTestimonials.map((item) => {
+              const key = `${item.id}-${copy}`;
+              return (
+                <VideoReelCard
+                  key={key}
+                  src={item.src}
+                  label={item.label}
+                  isActive={activeKey === key}
+                  onPlay={() => setActiveKey(key)}
+                  onEnded={() => setActiveKey(null)}
+                />
+              );
+            }),
+          )}
         </div>
 
         <button

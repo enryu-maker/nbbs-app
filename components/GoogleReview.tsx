@@ -125,7 +125,7 @@ export default function GoogleReview() {
         className="
           mx-auto
           w-full
-          max-w-4xl
+          max-w-6xl
           px-5
           text-center
         "
@@ -154,6 +154,7 @@ export default function GoogleReview() {
             text-[#111827]
             sm:text-4xl
             md:text-5xl
+            lg:whitespace-nowrap
           "
           style={{
             fontFamily: 'Inter, sans-serif',

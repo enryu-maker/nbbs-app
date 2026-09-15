@@ -4,6 +4,36 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+const socials = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/nbakliwal/',
+    icon: (
+      <>
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect x="2" y="9" width="4" height="12" />
+        <circle cx="4" cy="4" r="2" />
+      </>
+    ),
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/nb.businesssolutions?stkn=MXV4a3A1eXBmbGVicA==',
+    icon: (
+      <>
+        <rect x="2" y="2" width="20" height="20" rx="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+      </>
+    ),
+  },
+  {
+    label: 'WhatsApp',
+    href: 'https://wa.me/919145789151',
+    icon: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />,
+  },
+];
+
 export default function Footer() {
   const pathname = usePathname();
 
@@ -56,6 +86,34 @@ export default function Footer() {
             </p>
 
             <p className="mt-6 text-xs text-slate-400">Nashik, Maharashtra · connect@nbbs.in</p>
+
+            {/* Social — lucide v1 dropped brand icons, so these are inline SVGs */}
+            <div className="mt-5 flex gap-3">
+              {socials.map(({ label, href, icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-colors hover:border-white hover:text-white"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    {icon}
+                  </svg>
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Navigation */}
