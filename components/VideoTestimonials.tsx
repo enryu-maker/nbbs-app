@@ -2,7 +2,7 @@
 
 import { videoTestimonials } from '@/lib/video-testimonials';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const THUMB_SEEK_SECONDS = 1.5;
 
@@ -19,7 +19,9 @@ function capturePoster(video: HTMLVideoElement): string | null {
 
     const ctx = canvas.getContext('2d');
 
-    if (!ctx) return null;
+    if (!ctx) {
+      return null;
+    }
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -39,18 +41,12 @@ interface VideoReelCardProps {
 
 function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardProps) {
   const cardRef = useRef<HTMLElement>(null);
-
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  const thumbTimeRef = useRef<number>(THUMB_SEEK_SECONDS);
+  const thumbTimeRef = useRef(THUMB_SEEK_SECONDS);
 
   const [poster, setPoster] = useState<string | null>(null);
+  const [thumbReady, setThumbReady] = useState(false);
 
-  const [thumbReady, setThumbReady] = useState<boolean>(false);
-
-  /*
-   * Create video thumbnail
-   */
   useEffect(() => {
     const card = cardRef.current;
     const video = videoRef.current;
@@ -83,7 +79,6 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
             setThumbReady(true);
 
             video.pause();
-
             video.removeEventListener('seeked', onSeeked);
           };
 
@@ -116,13 +111,12 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
     };
   }, [poster]);
 
-  /*
-   * Play / pause video
-   */
   useEffect(() => {
     const video = videoRef.current;
 
-    if (!video) return;
+    if (!video) {
+      return;
+    }
 
     if (isActive) {
       video.muted = false;
@@ -135,10 +129,13 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
 
     video.muted = true;
     video.pause();
-    video.currentTime = thumbTimeRef.current;
+
+    if (video.readyState >= 1) {
+      video.currentTime = thumbTimeRef.current;
+    }
   }, [isActive]);
 
-  const showPoster = !isActive && Boolean(poster);
+  const showPoster = !isActive && !!poster;
 
   return (
     <article
@@ -148,7 +145,7 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
       }`}
     >
       <div className="video-reel-media">
-        {showPoster && <img src={poster} alt="" className="video-reel-poster" aria-hidden />}
+        {showPoster && <img src={poster} alt="" className="video-reel-poster" aria-hidden="true" />}
 
         <video
           ref={videoRef}
@@ -161,7 +158,7 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
           onEnded={onEnded}
         />
 
-        <div className="video-reel-shade" aria-hidden />
+        <div className="video-reel-shade" aria-hidden="true" />
 
         {!isActive && (
           <button
@@ -170,7 +167,7 @@ function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardP
             aria-label={`Play ${label} testimonial`}
             onClick={onPlay}
           >
-            <span className="video-reel-play-ring" aria-hidden />
+            <span className="video-reel-play-ring" aria-hidden="true" />
 
             <span className="video-reel-play-btn">
               <Play size={22} strokeWidth={2} fill="currentColor" />
@@ -190,19 +187,18 @@ export function VideoTestimonials() {
   const realCount = videoTestimonials.length;
 
   /*
-   * We render 5 copies.
+   * We render 5 copies:
    *
-   * This gives enough cards on both sides
-   * so the carousel can continuously move.
+   * COPY 0
+   * COPY 1
+   * COPY 2  <-- starting position
+   * COPY 3
+   * COPY 4
    *
-   * Example:
-   *
-   * 1 2 3 4 5 6
-   * 1 2 3 4 5 6
-   * 1 2 3 4 5 6
-   * 1 2 3 4 5 6
-   * 1 2 3 4 5 6
+   * This gives us enough duplicate cards on both sides
+   * to create a seamless infinite carousel.
    */
+
   const loopItems =
     realCount > 0
       ? Array.from({ length: 5 }, (_, copyIndex) =>
@@ -213,200 +209,173 @@ export function VideoTestimonials() {
         ).flat()
       : [];
 
-  /*
-   * Start from the center copy.
-   *
-   * Copy #2 starts at:
-   *
-   * realCount * 2
-   */
   const middleStart = realCount * 2;
 
   const currentIndexRef = useRef<number>(middleStart);
 
-  const isAnimatingRef = useRef<boolean>(false);
+  const isMovingRef = useRef<boolean>(false);
 
-  /*
-   * Get all cards
-   */
-  const getCards = useCallback((): HTMLElement[] => {
+  function getCards(): HTMLElement[] {
     const track = trackRef.current;
 
-    if (!track) return [];
+    if (!track) {
+      return [];
+    }
 
     return Array.from(track.querySelectorAll<HTMLElement>('.video-reel-card'));
-  }, []);
+  }
 
-  /*
-   * Calculate exact centered position
-   */
-  const getCardScrollLeft = useCallback(
-    (index: number): number | null => {
-      const track = trackRef.current;
+  function getCenteredScrollPosition(card: HTMLElement): number | null {
+    const track = trackRef.current;
 
-      if (!track) return null;
+    if (!track) {
+      return null;
+    }
 
-      const cards = getCards();
-      const card = cards[index];
+    const trackRect = track.getBoundingClientRect();
 
-      if (!card) return null;
+    const cardRect = card.getBoundingClientRect();
 
-      const trackRect = track.getBoundingClientRect();
+    return (
+      track.scrollLeft + (cardRect.left - trackRect.left) - (track.clientWidth - cardRect.width) / 2
+    );
+  }
 
-      const cardRect = card.getBoundingClientRect();
+  function moveToIndex(index: number, behavior: ScrollBehavior = 'smooth') {
+    const track = trackRef.current;
 
-      return (
-        track.scrollLeft +
-        (cardRect.left - trackRect.left) -
-        (track.clientWidth - cardRect.width) / 2
-      );
-    },
-    [getCards],
-  );
+    if (!track) {
+      return;
+    }
 
-  /*
-   * Move to a particular card
-   */
-  const moveToCard = useCallback(
-    (index: number, behavior: ScrollBehavior = 'smooth') => {
-      const track = trackRef.current;
+    const cards = getCards();
+    const card = cards[index];
 
-      if (!track) return;
+    if (!card) {
+      return;
+    }
 
-      const scrollLeft = getCardScrollLeft(index);
+    const scrollLeft = getCenteredScrollPosition(card);
 
-      if (scrollLeft === null) {
-        return;
+    if (scrollLeft === null) {
+      return;
+    }
+
+    track.scrollTo({
+      left: scrollLeft,
+      behavior,
+    });
+
+    currentIndexRef.current = index;
+  }
+
+  function normalizeLoop(index: number) {
+    if (realCount <= 0) {
+      return;
+    }
+
+    let normalizedIndex = index;
+
+    /*
+     * Keep the user visually inside COPY 2.
+     *
+     * If we move into COPY 3 or COPY 1,
+     * silently reposition to the equivalent
+     * card inside COPY 2.
+     */
+
+    if (index >= realCount * 3) {
+      normalizedIndex = middleStart + (index % realCount);
+    } else if (index < realCount) {
+      normalizedIndex = middleStart + (index % realCount);
+
+      if (normalizedIndex >= realCount * 3) {
+        normalizedIndex -= realCount;
       }
+    }
 
-      track.scrollTo({
-        left: scrollLeft,
-        behavior,
-      });
+    if (normalizedIndex !== index) {
+      moveToIndex(normalizedIndex, 'auto');
+    }
+  }
 
-      currentIndexRef.current = index;
-    },
-    [getCardScrollLeft],
-  );
-
-  /*
-   * Infinite carousel navigation
-   */
-  const scrollReels = useCallback(
-    (direction: 'left' | 'right') => {
-      if (realCount <= 1) {
-        return;
-      }
-
-      /*
-       * Prevent a second click from interrupting
-       * the current slide animation.
-       */
-      if (isAnimatingRef.current) {
-        return;
-      }
-
-      const current = currentIndexRef.current;
-
-      const next = direction === 'right' ? current + 1 : current - 1;
-
-      const cards = getCards();
-
-      if (!cards[next]) {
-        return;
-      }
-
-      isAnimatingRef.current = true;
-
-      /*
-       * IMPORTANT:
-       *
-       * We FIRST visually move to the next
-       * physical card.
-       *
-       * So:
-       *
-       * 6 → 1
-       *
-       * actually slides to the next "1"
-       * that is physically sitting after 6.
-       */
-      moveToCard(next, 'smooth');
-
-      /*
-       * Wait until the visual slide is complete.
-       */
-      window.setTimeout(() => {
-        const currentAfterMove = currentIndexRef.current;
-
-        /*
-         * If we are too far toward the right,
-         * silently move back to the equivalent
-         * card in the center copy.
-         *
-         * This happens AFTER the visible animation.
-         */
-        if (currentAfterMove >= realCount * 3) {
-          const normalizedIndex = middleStart + (currentAfterMove % realCount);
-
-          moveToCard(normalizedIndex, 'auto');
-
-          currentIndexRef.current = normalizedIndex;
-        }
-
-        /*
-         * Same logic toward the left.
-         */
-        if (currentAfterMove < realCount) {
-          const normalizedIndex =
-            middleStart + (((currentAfterMove % realCount) + realCount) % realCount);
-
-          moveToCard(normalizedIndex, 'auto');
-
-          currentIndexRef.current = normalizedIndex;
-        }
-
-        /*
-         * Unlock navigation.
-         */
-        window.setTimeout(() => {
-          isAnimatingRef.current = false;
-        }, 30);
-      }, 500);
-    },
-    [realCount, getCards, moveToCard, middleStart],
-  );
-
-  /*
-   * Initial position.
-   *
-   * Start at the first video of the
-   * CENTER copy.
-   */
-  useEffect(() => {
+  function scrollReels(direction: 'left' | 'right') {
     if (realCount <= 1) {
       return;
     }
 
+    if (isMovingRef.current) {
+      return;
+    }
+
+    const current = currentIndexRef.current;
+
+    const next = direction === 'right' ? current + 1 : current - 1;
+
+    const cards = getCards();
+
+    if (!cards[next]) {
+      return;
+    }
+
+    isMovingRef.current = true;
+
+    /*
+     * IMPORTANT:
+     * We ALWAYS animate to the physically adjacent card.
+     *
+     * So:
+     *
+     * Last video -> duplicate of first video
+     *
+     * looks like a normal next-card movement.
+     *
+     * There is no direct jump from last -> first.
+     */
+
+    moveToIndex(next, 'smooth');
+
+    window.setTimeout(() => {
+      normalizeLoop(next);
+
+      /*
+       * Small delay so the browser finishes the
+       * silent normalization before another click.
+       */
+      window.setTimeout(() => {
+        isMovingRef.current = false;
+      }, 50);
+    }, 650);
+  }
+
+  /*
+   * Start from COPY 2.
+   *
+   * NOTE: This hook (and the resize hook below) must run
+   * on every render, so they live BEFORE the early-return
+   * for the empty state. Hooks can never be called
+   * conditionally or after a return statement.
+   */
+  useEffect(() => {
     const timer = window.setTimeout(() => {
-      moveToCard(middleStart, 'auto');
+      moveToIndex(middleStart, 'auto');
     }, 100);
 
     return () => {
       window.clearTimeout(timer);
     };
-  }, [realCount, middleStart, moveToCard]);
+  }, [middleStart]);
 
   /*
-   * Keep current card centered on resize.
+   * Re-center current card after resize.
    */
   useEffect(() => {
     const handleResize = () => {
-      if (isAnimatingRef.current) {
+      if (isMovingRef.current) {
         return;
       }
 
-      moveToCard(currentIndexRef.current, 'auto');
+      moveToIndex(currentIndexRef.current, 'auto');
     };
 
     window.addEventListener('resize', handleResize);
@@ -414,11 +383,15 @@ export function VideoTestimonials() {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [moveToCard]);
+  }, []);
 
   /*
-   * If there are no videos, don't render
-   * the carousel.
+   * Empty state
+   *
+   * IMPORTANT:
+   * This must come AFTER all hook calls above.
+   * It's safe here because no hooks are declared
+   * below this line.
    */
   if (realCount === 0) {
     return null;
@@ -426,7 +399,7 @@ export function VideoTestimonials() {
 
   return (
     <section id="video-testimonials" className="video-testi-bg">
-      <div className="video-testi-glow" aria-hidden />
+      <div className="video-testi-glow" aria-hidden="true" />
 
       <div className="container">
         <div className="video-testi-head">
@@ -441,7 +414,6 @@ export function VideoTestimonials() {
       </div>
 
       <div className="video-reels-shell">
-        {/* PREVIOUS */}
         <button
           type="button"
           className="video-reels-nav video-reels-nav--prev"
@@ -451,7 +423,6 @@ export function VideoTestimonials() {
           <ChevronLeft size={22} strokeWidth={2} />
         </button>
 
-        {/* INFINITE TRACK */}
         <div ref={trackRef} className="video-reels-track">
           {loopItems.map((item) => (
             <VideoReelCard
@@ -465,7 +436,6 @@ export function VideoTestimonials() {
           ))}
         </div>
 
-        {/* NEXT */}
         <button
           type="button"
           className="video-reels-nav video-reels-nav--next"

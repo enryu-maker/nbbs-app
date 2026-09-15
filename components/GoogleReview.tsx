@@ -1,224 +1,449 @@
-// components/GoogleReview.tsx
 'use client';
 
-import { useAnchorCustomers } from '@/src/hooks';
-import { googleReviews } from '@/lib/google-reviews';
+import { videoTestimonials } from '@/lib/video-testimonials';
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
-interface ReviewItem {
-  id: string;
-  name: string;
-  review: string;
+const THUMB_SEEK_SECONDS = 1.5;
+
+function capturePoster(video: HTMLVideoElement): string | null {
+  if (!video.videoWidth || !video.videoHeight) {
+    return null;
+  }
+
+  try {
+    const canvas = document.createElement('canvas');
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      return null;
+    }
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    return canvas.toDataURL('image/jpeg', 0.75);
+  } catch {
+    return null;
+  }
 }
 
-function ReviewCard({ review }: { review: ReviewItem }) {
+interface VideoReelCardProps {
+  src: string;
+  label: string;
+  isActive: boolean;
+  onPlay: () => void;
+  onEnded: () => void;
+}
+
+function VideoReelCard({ src, label, isActive, onPlay, onEnded }: VideoReelCardProps) {
+  const cardRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const thumbTimeRef = useRef(THUMB_SEEK_SECONDS);
+
+  const [poster, setPoster] = useState<string | null>(null);
+  const [thumbReady, setThumbReady] = useState(false);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    const video = videoRef.current;
+
+    if (!card || !video || poster) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          return;
+        }
+
+        const prepareThumbnail = () => {
+          const target = Math.min(
+            THUMB_SEEK_SECONDS,
+            Math.max(0.5, (video.duration || THUMB_SEEK_SECONDS) * 0.12),
+          );
+
+          thumbTimeRef.current = target;
+
+          const onSeeked = () => {
+            const dataUrl = capturePoster(video);
+
+            if (dataUrl) {
+              setPoster(dataUrl);
+            }
+
+            setThumbReady(true);
+
+            video.pause();
+            video.removeEventListener('seeked', onSeeked);
+          };
+
+          video.addEventListener('seeked', onSeeked);
+
+          video.currentTime = target;
+        };
+
+        if (video.readyState >= 1) {
+          prepareThumbnail();
+        } else {
+          video.preload = 'auto';
+
+          video.addEventListener('loadedmetadata', prepareThumbnail, { once: true });
+
+          video.load();
+        }
+
+        observer.disconnect();
+      },
+      {
+        rootMargin: '120px',
+      },
+    );
+
+    observer.observe(card);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [poster]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    if (isActive) {
+      video.muted = false;
+      video.currentTime = 0;
+
+      void video.play().catch(() => {});
+
+      return;
+    }
+
+    video.muted = true;
+    video.pause();
+
+    if (video.readyState >= 1) {
+      video.currentTime = thumbTimeRef.current;
+    }
+  }, [isActive]);
+
+  const showPoster = !isActive && !!poster;
+
   return (
     <article
-      className="
-        mr-5
-        flex
-        w-[300px]
-        shrink-0
-        flex-col
-        rounded-2xl
-        border
-        border-white/[0.06]
-        bg-[#141a32]
-        px-6
-        py-7
-        transition-colors
-        duration-300
-        hover:bg-[#17213D]
-        sm:w-[340px]
-        md:w-[360px]
-      "
+      ref={cardRef}
+      className={`video-reel-card${isActive ? ' is-playing' : ''}${
+        thumbReady || poster ? ' has-thumb' : ''
+      }`}
     >
-      {/* QUOTE MARK */}
-      <div
-        className="
-          font-serif
-          text-3xl
-          font-bold
-          leading-none
-          text-white
-        "
-      >
-        &rdquo;
-      </div>
+      <div className="video-reel-media">
+        {showPoster && <img src={poster} alt="" className="video-reel-poster" aria-hidden="true" />}
 
-      {/* REVIEW TEXT */}
-      <p
-        className="
-          mt-4
-          text-[15px]
-          leading-7
-          text-white
-        "
-        style={{
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        {review.review}
-      </p>
+        <video
+          ref={videoRef}
+          src={src}
+          playsInline
+          muted
+          preload="none"
+          controls={isActive}
+          className={showPoster ? 'video-reel-video--hidden' : undefined}
+          onEnded={onEnded}
+        />
 
-      {/* FOUNDER NAME */}
-      <div className="mt-auto pt-8">
-        <p
-          className="
-            whitespace-nowrap
-            text-[15px]
-            font-bold
-            text-white
-          "
-          style={{
-            fontFamily: 'Inter, sans-serif',
-          }}
-        >
-          {review.name}
-        </p>
+        <div className="video-reel-shade" aria-hidden="true" />
+
+        {!isActive && (
+          <button
+            type="button"
+            className="video-reel-play"
+            aria-label={`Play ${label} testimonial`}
+            onClick={onPlay}
+          >
+            <span className="video-reel-play-ring" aria-hidden="true" />
+
+            <span className="video-reel-play-btn">
+              <Play size={22} strokeWidth={2} fill="currentColor" />
+            </span>
+          </button>
+        )}
       </div>
     </article>
   );
 }
 
-export default function GoogleReview() {
-  const { customers } = useAnchorCustomers();
+export function VideoTestimonials() {
+  const [activeKey, setActiveKey] = useState<string | null>(null);
 
-  const customerReviews: ReviewItem[] = (customers || [])
-    .filter((customer) => Boolean(customer.quote))
-    .map((customer, index) => ({
-      id: `${customer.company || 'customer'}-${index}`,
-      name: customer.founder,
-      review: customer.quote,
-    }));
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const fallbackReviews: ReviewItem[] = googleReviews.map((item) => ({
-    id: item.id,
-    name: item.name,
-    review: item.review,
-  }));
+  const realCount: number = videoTestimonials.length;
 
-  const baseReviews = customerReviews.length > 0 ? customerReviews : fallbackReviews;
+  /*
+   * We render 5 copies:
+   *
+   * COPY 0
+   * COPY 1
+   * COPY 2  <-- starting position
+   * COPY 3
+   * COPY 4
+   *
+   * This gives us enough duplicate cards on both sides
+   * to create a seamless infinite carousel.
+   */
 
-  if (!baseReviews || baseReviews.length === 0) {
+  const loopItems =
+    realCount > 0
+      ? Array.from({ length: 5 }, (_, copyIndex) =>
+          videoTestimonials.map((item, itemIndex) => ({
+            ...item,
+            renderKey: `${copyIndex}-${item.id}-${itemIndex}`,
+          })),
+        ).flat()
+      : [];
+
+  const middleStart = realCount * 2;
+
+  const currentIndexRef = useRef<number>(middleStart);
+
+  const isMovingRef = useRef<boolean>(false);
+
+  function getCards(): HTMLElement[] {
+    const track = trackRef.current;
+
+    if (!track) {
+      return [];
+    }
+
+    return Array.from(track.querySelectorAll<HTMLElement>('.video-reel-card'));
+  }
+
+  function getCenteredScrollPosition(card: HTMLElement): number | null {
+    const track = trackRef.current;
+
+    if (!track) {
+      return null;
+    }
+
+    const trackRect = track.getBoundingClientRect();
+
+    const cardRect = card.getBoundingClientRect();
+
+    return (
+      track.scrollLeft + (cardRect.left - trackRect.left) - (track.clientWidth - cardRect.width) / 2
+    );
+  }
+
+  function moveToIndex(index: number, behavior: ScrollBehavior = 'smooth') {
+    const track = trackRef.current;
+
+    if (!track) {
+      return;
+    }
+
+    const cards = getCards();
+    const card = cards[index];
+
+    if (!card) {
+      return;
+    }
+
+    const scrollLeft = getCenteredScrollPosition(card);
+
+    if (scrollLeft === null) {
+      return;
+    }
+
+    track.scrollTo({
+      left: scrollLeft,
+      behavior,
+    });
+
+    currentIndexRef.current = index;
+  }
+
+  function normalizeLoop(index: number) {
+    if (realCount <= 0) {
+      return;
+    }
+
+    let normalizedIndex = index;
+
+    /*
+     * Keep the user visually inside COPY 2.
+     *
+     * If we move into COPY 3 or COPY 1,
+     * silently reposition to the equivalent
+     * card inside COPY 2.
+     */
+
+    if (index >= realCount * 3) {
+      normalizedIndex = middleStart + (index % realCount);
+    } else if (index < realCount) {
+      normalizedIndex = middleStart + (index % realCount);
+
+      if (normalizedIndex >= realCount * 3) {
+        normalizedIndex -= realCount;
+      }
+    }
+
+    if (normalizedIndex !== index) {
+      moveToIndex(normalizedIndex, 'auto');
+    }
+  }
+
+  function scrollReels(direction: 'left' | 'right') {
+    if (realCount <= 1) {
+      return;
+    }
+
+    if (isMovingRef.current) {
+      return;
+    }
+
+    const current = currentIndexRef.current;
+
+    const next = direction === 'right' ? current + 1 : current - 1;
+
+    const cards = getCards();
+
+    if (!cards[next]) {
+      return;
+    }
+
+    isMovingRef.current = true;
+
+    /*
+     * IMPORTANT:
+     * We ALWAYS animate to the physically adjacent card.
+     *
+     * So:
+     *
+     * Last video -> duplicate of first video
+     *
+     * looks like a normal next-card movement.
+     *
+     * There is no direct jump from last -> first.
+     */
+
+    moveToIndex(next, 'smooth');
+
+    window.setTimeout(() => {
+      normalizeLoop(next);
+
+      /*
+       * Small delay so the browser finishes the
+       * silent normalization before another click.
+       */
+      window.setTimeout(() => {
+        isMovingRef.current = false;
+      }, 50);
+    }, 650);
+  }
+
+  /*
+   * Start from COPY 2.
+   *
+   * NOTE: This hook (and the resize hook below) must run
+   * on every render, so they live BEFORE the early-return
+   * for the empty state. Hooks can never be called
+   * conditionally or after a return statement.
+   */
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      moveToIndex(middleStart, 'auto');
+    }, 100);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [middleStart]);
+
+  /*
+   * Re-center current card after resize.
+   */
+  useEffect(() => {
+    const handleResize = () => {
+      if (isMovingRef.current) {
+        return;
+      }
+
+      moveToIndex(currentIndexRef.current, 'auto');
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  /*
+   * Empty state
+   *
+   * IMPORTANT:
+   * This must come AFTER all hook calls above.
+   * It's safe here because no hooks are declared
+   * below this line.
+   */
+  if (realCount === 0) {
     return null;
   }
 
-  // Ensure each track has enough cards (at least 10) so it comfortably exceeds any screen width
-  // allowing a completely seamless, continuous infinite loop without blank gaps or snapping.
-  const repeatCount = Math.max(2, Math.ceil(10 / baseReviews.length));
-  const displayReviews = Array.from({ length: repeatCount }, () => baseReviews).flat();
-
   return (
-    <section
-      className="
-        relative
-        overflow-hidden
-        bg-white
-        py-16
-        md:py-20
-      "
-    >
-      {/* =====================================================
-          HEADER
-      ====================================================== */}
-      <div
-        className="
-          mx-auto
-          w-full
-          max-w-4xl
-          px-5
-          text-center
-        "
-      >
-        {/* SMALL HEADING */}
-        <p
-          className="
-            text-sm
-            font-semibold
-            tracking-[0.08em]
-            text-[#111827]
-            sm:text-base
-          "
-          style={{
-            fontFamily: 'Inter, sans-serif',
-          }}
-        >
-          What Founders Say
-        </p>
+    <section id="video-testimonials" className="video-testi-bg">
+      <div className="video-testi-glow" aria-hidden="true" />
 
-        {/* MAIN HEADING */}
-        <h2
-          className="
-            mt-3
-            text-3xl
-            font-bold
-            leading-tight
-            tracking-[-0.03em]
-            text-[#111827]
-            sm:text-4xl
-            md:text-5xl
-          "
-          style={{
-            fontFamily: 'Inter, sans-serif',
-          }}
-        >
-          Trusted by businessmen like you.
-        </h2>
+      <div className="container">
+        <div className="video-testi-head">
+          <span className="eyebrow">Video Testimonials</span>
+
+          <h2>
+            Hear it from <span className="grey">founders.</span>
+          </h2>
+
+          <p>Real stories from founders who attended the workshop and walked away with clarity.</p>
+        </div>
       </div>
 
-      {/* =====================================================
-          MARQUEE
-      ====================================================== */}
-      <div
-        className="
-          relative
-          mt-12
-          w-full
-          overflow-hidden
-        "
-      >
-        <div
-          className="
-            animate-marquee-slow
-            flex
-            w-max
-            items-stretch
-            will-change-transform
-          "
+      <div className="video-reels-shell">
+        <button
+          type="button"
+          className="video-reels-nav video-reels-nav--prev"
+          aria-label="Previous reels"
+          onClick={() => scrollReels('left')}
         >
-          {/* =================================================
-              TRACK 1
-          ================================================== */}
-          <div
-            className="
-              flex
-              shrink-0
-              items-stretch
-            "
-            aria-hidden={false}
-          >
-            {displayReviews.map((review, idx) => (
-              <ReviewCard key={`track-1-${review.id}-${idx}`} review={review} />
-            ))}
-          </div>
+          <ChevronLeft size={22} strokeWidth={2} />
+        </button>
 
-          {/* =================================================
-              TRACK 2
-              Exact duplicate for seamless continuous loop
-          ================================================== */}
-          <div
-            className="
-              flex
-              shrink-0
-              items-stretch
-            "
-            aria-hidden="true"
-          >
-            {displayReviews.map((review, idx) => (
-              <ReviewCard key={`track-2-${review.id}-${idx}`} review={review} />
-            ))}
-          </div>
+        <div ref={trackRef} className="video-reels-track">
+          {loopItems.map((item) => (
+            <VideoReelCard
+              key={item.renderKey}
+              src={item.src}
+              label={item.label}
+              isActive={activeKey === item.renderKey}
+              onPlay={() => setActiveKey(item.renderKey)}
+              onEnded={() => setActiveKey(null)}
+            />
+          ))}
         </div>
+
+        <button
+          type="button"
+          className="video-reels-nav video-reels-nav--next"
+          aria-label="Next reels"
+          onClick={() => scrollReels('right')}
+        >
+          <ChevronRight size={22} strokeWidth={2} />
+        </button>
       </div>
     </section>
   );
