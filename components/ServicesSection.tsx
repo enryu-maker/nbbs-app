@@ -79,10 +79,15 @@ export default function ServicesSection() {
 
             trigger: servicesSectionRef.current,
 
-            // Keep the pinned service card below the header.
-            // This prevents the card from going underneath the header
-            // when the animation starts.
-            start: 'top 80px',
+            // The stage is only as tall as its content, so pin it by its
+            // bottom edge: the content above stays visible instead of an
+            // empty gap opening below. If the stage is taller than the
+            // space under the 80px header, pin by the top so it never
+            // slides beneath the header.
+            start: () =>
+              (servicesSectionRef.current?.offsetHeight ?? 0) > window.innerHeight - 80
+                ? 'top 80px'
+                : 'bottom bottom',
 
             // The first card is already visible, so we only need
             // one scroll segment for every remaining card.
