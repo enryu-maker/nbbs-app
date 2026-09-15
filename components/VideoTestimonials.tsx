@@ -146,7 +146,7 @@ export function VideoTestimonials() {
   }
 
   return (
-    <section id="video-testimonials" className="video-testi-bg pt-4">
+    <section id="video-testimonials" className="video-testi-bg pt-4 pb-12 md:pb-16">
       <div className="video-testi-glow" aria-hidden />
       <div className="container">
         <div className="video-testi-head">

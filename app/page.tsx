@@ -12,10 +12,12 @@ import ContactSection from '@/components/ContactSection';
 
 export default function Home() {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-[#fbf9f8] text-[#172039] antialiased">
+    // overflow-*-clip (not hidden) on the services ancestors: "hidden" creates a
+    // scroll container, which breaks the sticky service cards.
+    <div className="min-h-screen w-full overflow-x-clip bg-[#fbf9f8] text-[#172039] antialiased">
       <Header />
 
-      <main className="w-full grow overflow-x-hidden">
+      <main className="w-full grow overflow-x-clip">
         {/* HERO */}
         <HeroSection />
 
@@ -35,7 +37,7 @@ export default function Home() {
         </section>
 
         {/* SERVICES */}
-        <section id="services" className="w-full overflow-hidden">
+        <section id="services" className="w-full overflow-clip">
           <ServicesSection />
         </section>
 

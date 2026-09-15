@@ -2,180 +2,29 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useRef } from 'react';
 import { useServices } from '@/src/hooks';
 
 export default function ServicesSection() {
   const { services } = useServices();
   const servicesSectionRef = useRef<HTMLDivElement | null>(null);
 
-  // Scrolls the pinned GSAP carousel to a specific service card by index,
-  // since the cards are stacked (position: absolute) and normal anchor
-  // scrolling can't reach them on its own.
+  // Sticky cards report their stuck position, so scrollIntoView can't reach
+  // them. Compute the card's in-flow top from the heights of the cards above.
   const scrollToServiceIndex = (e: React.MouseEvent<HTMLAnchorElement>, targetIndex: number) => {
     e.preventDefault();
 
-    // Make sure GSAP has up-to-date measurements before we read them.
-    ScrollTrigger.refresh();
+    const stage = servicesSectionRef.current;
+    if (!stage) return;
 
-    const trigger = ScrollTrigger.getById('services-pin');
-    const targetService = services[targetIndex] || services[0];
-    const targetId = `service-${targetService?.number}`;
-
-    if (trigger && services.length > 1) {
-      // The first card is already visible.
-      // Only the remaining cards need animation.
-      const totalDuration = Math.max(services.length - 1, 1);
-
-      const buffer = 0.15;
-      const targetTime = Math.max(targetIndex - buffer, 0);
-      const progress = Math.min(targetTime / totalDuration, 1);
-
-      const targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
-
-      window.scrollTo({
-        top: targetScroll,
-        behavior: 'auto',
-      });
-    } else {
-      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+    const panels = Array.from(stage.children) as HTMLElement[];
+    let top = stage.getBoundingClientRect().top + window.scrollY;
+    for (const panel of panels.slice(0, targetIndex)) {
+      top += panel.offsetHeight + parseFloat(getComputedStyle(panel).marginBottom);
     }
+
+    window.scrollTo({ top: top - 80, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      mm.add('(min-width: 1024px)', () => {
-        const sections = gsap.utils.toArray<HTMLElement>('.service-panel');
-
-        if (!sections.length || !servicesSectionRef.current) {
-          return;
-        }
-
-        // INITIAL POSITION
-
-        // All cards start below the visible service area.
-        gsap.set(sections, {
-          yPercent: 100,
-        });
-
-        // First card is immediately visible.
-        gsap.set(sections[0], {
-          yPercent: 0,
-        });
-
-        // SERVICES PINNED TIMELINE
-
-        const remainingCards = Math.max(sections.length - 1, 1);
-
-        const timeline = gsap.timeline({
-          scrollTrigger: {
-            id: 'services-pin',
-
-            trigger: servicesSectionRef.current,
-
-            // The stage is only as tall as its content, so pin it by its
-            // bottom edge: the content above stays visible instead of an
-            // empty gap opening below. If the stage is taller than the
-            // space under the 80px header, pin by the top so it never
-            // slides beneath the header.
-            start: () =>
-              (servicesSectionRef.current?.offsetHeight ?? 0) > window.innerHeight - 80
-                ? 'top 80px'
-                : 'bottom bottom',
-
-            // The first card is already visible, so we only need
-            // one scroll segment for every remaining card.
-            end: `+=${remainingCards * 100}%`,
-
-            pin: true,
-
-            // Keeps the page flow correct after the pinned section.
-            pinSpacing: true,
-
-            scrub: 1,
-
-            anticipatePin: 1,
-
-            invalidateOnRefresh: true,
-
-            fastScrollEnd: true,
-          },
-        });
-
-        // CARD REVEAL ANIMATION
-
-        sections.forEach((section, index) => {
-          // First card is already visible.
-          if (index === 0) return;
-
-          timeline.to(
-            section,
-            {
-              yPercent: 0,
-              duration: 1,
-              ease: 'none',
-            },
-            `service-${index}`,
-          );
-        });
-
-        // gsap.matchMedia cleanup
-        return () => {
-          gsap.set(sections, {
-            clearProps: 'transform',
-          });
-        };
-      });
-
-      ScrollTrigger.refresh();
-    }, servicesSectionRef);
-
-    // REFRESH AFTER IMAGES / FONTS / CONTENT LOAD
-
-    const handleLoad = () => {
-      ScrollTrigger.refresh();
-    };
-
-    window.addEventListener('load', handleLoad);
-
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(() => {
-        ScrollTrigger.refresh();
-      });
-    }
-
-    // WATCH SERVICES SECTION SIZE
-
-    let resizeObserver: ResizeObserver | undefined;
-
-    if (servicesSectionRef.current && typeof ResizeObserver !== 'undefined') {
-      let rafId = 0;
-
-      resizeObserver = new ResizeObserver(() => {
-        cancelAnimationFrame(rafId);
-
-        rafId = requestAnimationFrame(() => {
-          ScrollTrigger.refresh();
-        });
-      });
-
-      resizeObserver.observe(servicesSectionRef.current);
-    }
-
-    return () => {
-      window.removeEventListener('load', handleLoad);
-
-      resizeObserver?.disconnect();
-
-      ctx.revert();
-    };
-  }, [services]);
 
   return (
     <section
@@ -272,27 +121,21 @@ export default function ServicesSection() {
 
       {services.length > 0 && (
         <section id="solutions" className="bg-[#fbf9f8]">
-          {/* GSAP SERVICES */}
+          {/* STACKED SERVICES */}
 
-          <div ref={servicesSectionRef} className="services-scroll relative w-full">
+          <div className="services-scroll relative w-full">
             {/*
               IMPORTANT:
-              On desktop every card sits in the same grid cell, so the stage
-              is exactly as tall as the tallest card's content — no empty
-              space, and nothing gets clipped.
+              On desktop each card is sticky under the 80px header at its
+              natural height, and the next card slides up over it. No fixed
+              stage height, so no empty space and nothing gets clipped.
             */}
-            <div
-              className="
-                relative w-full overflow-visible
-                lg:grid
-                lg:overflow-hidden
-              "
-            >
+            <div ref={servicesSectionRef} className="relative w-full">
               {services.map((service, index) => (
                 <article
                   key={service.number}
                   id={`service-${service.number}`}
-                  className="service-panel relative mb-10 w-full overflow-visible bg-[#EEF0F3] last:mb-0 lg:mb-0 lg:overflow-hidden lg:[grid-area:1/1]"
+                  className="service-panel relative mb-10 w-full overflow-visible bg-[#EEF0F3] last:mb-0 lg:sticky lg:top-20 lg:mb-0 lg:overflow-hidden"
                   style={{
                     zIndex: index + 1,
                   }}
