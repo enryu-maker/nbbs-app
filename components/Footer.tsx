@@ -86,34 +86,6 @@ export default function Footer() {
             </p>
 
             <p className="mt-6 text-xs text-slate-400">Nashik, Maharashtra · connect@nbbs.in</p>
-
-            {/* Social — lucide v1 dropped brand icons, so these are inline SVGs */}
-            <div className="mt-5 flex gap-3">
-              {socials.map(({ label, href, icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-colors hover:border-white hover:text-white"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    {icon}
-                  </svg>
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Navigation */}
@@ -244,6 +216,34 @@ export default function Footer() {
                 >
                   {footerData.contact.email}
                 </a>
+
+                {/* Social Media Icons */}
+                <div className="flex items-center gap-3 -ml-2">
+                  {socials.map(({ label, href, icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all duration-200 hover:border-white hover:bg-white/10 hover:text-white"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        {icon}
+                      </svg>
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
