@@ -145,7 +145,30 @@ export default function ServicesPage() {
       ScrollTrigger.refresh();
     }, servicesSectionRef);
 
+    // Images/fonts finishing after mount change this section's height,
+    // which silently invalidates the pin's start/end math and shows up
+    // as a white gap while scrolling. `window.load` only fires once per
+    // full page load (never again after a client-side route change), so
+    // watch the section itself and re-measure whenever its size changes.
+    const handleLoad = () => ScrollTrigger.refresh();
+    window.addEventListener('load', handleLoad);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
+
+    let resizeObserver: ResizeObserver | undefined;
+    if (servicesSectionRef.current && typeof ResizeObserver !== 'undefined') {
+      let rafId = 0;
+      resizeObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
+      resizeObserver.observe(servicesSectionRef.current);
+    }
+
     return () => {
+      window.removeEventListener('load', handleLoad);
+      resizeObserver?.disconnect();
       ctx.revert();
     };
   }, []);
