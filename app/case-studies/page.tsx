@@ -67,24 +67,6 @@ export default async function CaseStudiesPage() {
               Case studies are on their way. Check back shortly.
             </p>
           )}
-
-          <div className="mt-16 rounded-2xl bg-[#141a32] px-8 py-10 text-center text-white sm:px-12">
-            <p
-              className="text-[24px] font-medium sm:text-[28px]"
-              style={{ fontFamily: 'Bodoni Moda, serif' }}
-            >
-              Want a result like these?
-            </p>
-            <p className="mx-auto mt-3 max-w-lg text-[14px] leading-6 text-white/60">
-              Start with a free diagnostic. We will tell you honestly whether NBBS is the right fit.
-            </p>
-            <Link
-              href="/#contact"
-              className="mt-6 inline-block rounded-xl bg-[#e9c176] px-6 py-3 text-[12px] font-bold uppercase tracking-[0.16em] text-[#141a32] transition hover:bg-[#ffdea5]"
-            >
-              Book Diagnostic
-            </Link>
-          </div>
         </div>
       </main>
       <Footer />
