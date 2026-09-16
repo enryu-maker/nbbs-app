@@ -47,6 +47,8 @@ export default function ServicesSection() {
     }
 
     window.scrollTo({ top: top - 80, behavior: 'smooth' });
+    // preventDefault() kills the browser's hash update, so push it back manually.
+    history.pushState(null, '', `#service-0${targetIndex + 1}`);
   };
 
   return (

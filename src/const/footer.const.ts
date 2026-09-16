@@ -15,15 +15,15 @@ export const footerData = {
   solutions: [
     {
       name: 'Business Clarity Workshop',
-      href: '/#service-01',
+      href: 'https://workshop.nbbs.in',
     },
     {
       name: 'Business OPD',
-      href: '/#service-02',
+      href: 'https://businessopd.nbbs.in',
     },
     {
       name: 'Incentiwise',
-      href: '/#service-03',
+      href: 'https://incentiwise.nbbs.in',
     },
   ],
 

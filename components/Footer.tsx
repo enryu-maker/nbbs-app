@@ -37,6 +37,13 @@ const socials = [
 export default function Footer() {
   const pathname = usePathname();
 
+  // preventDefault() kills the browser's hash update, so push it back manually.
+  const scrollToId = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.pushState(null, '', `#${id}`);
+  };
+
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Already on the home page: smooth-scroll up to the hero instead of
     // relying on Next.js's default (instant) hash jump. On any other page,
@@ -51,6 +58,7 @@ export default function Footer() {
         : 0;
 
       window.scrollTo({ top: targetTop, behavior: 'smooth' });
+      history.pushState(null, '', '/');
     }
   };
 
@@ -99,21 +107,27 @@ export default function Footer() {
 
                 <div className="flex flex-col gap-4">
                   <Link
-                    href="/#service-01"
+                    href="https://workshop.nbbs.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     Business Clarity Workshop
                   </Link>
 
                   <Link
-                    href="/#service-02"
+                    href="https://businessopd.nbbs.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     The Business OPD™
                   </Link>
 
                   <Link
-                    href="/#service-03"
+                    href="https://incentiwise.nbbs.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     Incentiwise
@@ -130,13 +144,7 @@ export default function Footer() {
                 <div className="flex flex-col gap-4">
                   <Link
                     href="#about"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('about')?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                      });
-                    }}
+                    onClick={(e) => scrollToId(e, 'about')}
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     About Us
@@ -144,13 +152,7 @@ export default function Footer() {
 
                   <Link
                     href="#vision"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('vision')?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                      });
-                    }}
+                    onClick={(e) => scrollToId(e, 'vision')}
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     Our Vision
@@ -158,13 +160,7 @@ export default function Footer() {
 
                   <Link
                     href="#mission"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('mission')?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                      });
-                    }}
+                    onClick={(e) => scrollToId(e, 'mission')}
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     Our Mission
@@ -172,13 +168,7 @@ export default function Footer() {
 
                   <Link
                     href="#services"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById('services')?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                      });
-                    }}
+                    onClick={(e) => scrollToId(e, 'services')}
                     className="w-fit text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:text-white"
                   >
                     Services
