@@ -28,8 +28,9 @@ export function normalizeCarousel(item: ApiCarousel): Carousel {
     id: item.id,
     slug: String(item.id),
     title: item.title?.trim() || 'Untitled carousel',
+    description: item.description?.trim() || '',
     images,
-    coverImage: images[0]?.url,
+    coverImage: images[0]?.url || resolveMediaUrl(item.first_image?.image_url),
     publishedAt: item.created_at?.slice(0, 10) || '',
   };
 }

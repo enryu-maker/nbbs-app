@@ -17,7 +17,10 @@ export default function CarouselCard({ carousel }: { carousel: Carousel }) {
       href={`/carousel/${carousel.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-[#141a32]/10 bg-white transition-shadow hover:shadow-lg"
     >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#141a32]/5">
+      <div
+        className="relative w-full overflow-hidden bg-[#141a32]/5"
+        style={{ aspectRatio: '4 / 5' }}
+      >
         {carousel.coverImage ? (
           <Image
             src={carousel.coverImage}
@@ -42,9 +45,6 @@ export default function CarouselCard({ carousel }: { carousel: Carousel }) {
           {carousel.title}
         </h2>
         <div className="mt-auto flex items-center justify-between pt-2 text-[12px] text-[#141a32]/45">
-          <span>
-            {carousel.images.length} {carousel.images.length === 1 ? 'image' : 'images'}
-          </span>
           <span>{formatDate(carousel.publishedAt)}</span>
         </div>
       </div>

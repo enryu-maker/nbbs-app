@@ -107,7 +107,7 @@ export default function StatsSection() {
   const stats =
     visitorCount === undefined
       ? cmsStats
-      : [{ value: visitorCount.toLocaleString('en-IN'), label: 'Website Visitors' }, ...cmsStats];
+      : [{ value: visitorCount.toLocaleString('en-IN'), label: 'Ecosystem Visitors' }, ...cmsStats];
 
   if (stats.length === 0) {
     return null;

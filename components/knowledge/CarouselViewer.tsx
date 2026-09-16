@@ -38,15 +38,18 @@ export default function CarouselViewer({ carousel }: { carousel: Carousel }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="w-full max-w-[360px] sm:max-w-[400px]">
       <div className="overflow-hidden rounded-3xl border border-[#141a32]/10 bg-white shadow-xl">
-        <div className="relative aspect-[16/10] w-full bg-[#141a32]/5">
+        <div
+          className="relative w-full bg-[#141a32]/5"
+          style={{ aspectRatio: '4 / 5' }}
+        >
           <Image
             src={slide.url}
             alt={slide.caption || `${carousel.title} — slide ${index + 1}`}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, 768px"
+            sizes="400px"
             priority
           />
           <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-[#141a32]/80 to-transparent p-6 pt-16">
@@ -54,9 +57,9 @@ export default function CarouselViewer({ carousel }: { carousel: Carousel }) {
               <p className="text-[16px] font-medium text-white sm:text-[18px]">
                 {slide.caption || carousel.title}
               </p>
-              <span className="shrink-0 text-[11px] font-bold uppercase tracking-[0.18em] text-[#e9c176]">
+              {/* <span className="shrink-0 text-[11px] font-bold uppercase tracking-[0.18em] text-[#e9c176]">
                 {index + 1} / {total}
-              </span>
+              </span> */}
             </div>
           </div>
         </div>
