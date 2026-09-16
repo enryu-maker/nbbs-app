@@ -4,3 +4,5 @@ export * from './footer.const';
 export * from './services.const';
 export * from './industries.const';
 export * from './stats.const';
+export * from './site.const';
+export * from './faq.const';

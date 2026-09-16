@@ -1,9 +1,8 @@
 import type { MetadataRoute } from 'next';
-
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nbbs.in').replace(/\/$/, '');
+import { SITE_URL as siteUrl } from '@/src/const/site.const';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ['', '/about', '/services'];
+  const routes = ['', '/about', '/services', '/faq'];
   const legalRoutes = ['/disclaimer', '/intellectual-property', '/cookie-policy'];
 
   return [

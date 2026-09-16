@@ -33,14 +33,14 @@ export default function ContactSection() {
               HEADING
           ============================================================ */}
 
-          <h1
+          <h2
             className="mb-10 font-medium text-[40px] leading-none md:text-[50px]"
             style={{
               fontFamily: 'Bodoni Moda, serif',
             }}
           >
             Contact Us
-          </h1>
+          </h2>
 
           {/* ============================================================
               GRID: CONTACT INFO (LEFT) | DIVIDER | MAP (RIGHT)

@@ -96,14 +96,14 @@ export default function ServicesSection() {
 
             {/* Heading */}
 
-            <h1
+            <h2
               className="text-[44px] font-medium leading-[1.05] tracking-tight text-white xs:text-[48px] sm:text-[56px] md:text-[72px]"
               style={{
                 fontFamily: 'Bodoni Moda, serif',
               }}
             >
               NBBS Ecosystem
-            </h1>
+            </h2>
 
             {/* Subheading */}
 

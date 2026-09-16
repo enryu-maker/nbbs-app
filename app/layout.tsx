@@ -15,7 +15,7 @@ const fraunces = Fraunces({
   display: 'swap',
 });
 
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nbbs.in').replace(/\/$/, '');
+import { SITE_URL as siteUrl } from '@/src/const/site.const';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -24,18 +24,7 @@ export const metadata: Metadata = {
     template: '%s | NB Business Solutions',
   },
   description:
-    'NB Business Solutions helps MSME founders identify what is holding their business back, create clarity on what needs attention, and implement practical business solutions for sustainable growth.',
-  keywords: [
-    'NB Business Solutions',
-    'NBBS',
-    'business consulting Nashik',
-    'MSME business solutions',
-    'business diagnostic',
-    'business OPD',
-    'CRM for SMB',
-    'cashflow management',
-    'business incentive management',
-  ],
+    'Business diagnosis, clarity and practical implementation for MSME founders in Nashik. Diagnose before you prescribe.',
   authors: [{ name: 'NB Business Solutions' }],
   creator: 'NB Business Solutions',
   publisher: 'NB Business Solutions',
@@ -49,20 +38,13 @@ export const metadata: Metadata = {
     siteName: 'NB Business Solutions',
     title: 'NB Business Solutions | Integrated MSME Business Solutions, Nashik',
     description:
-      'NB Business Solutions helps MSME founders identify what is holding their business back, create clarity on what needs attention, and implement practical business solutions for sustainable growth.',
-    images: [
-      {
-        url: '/nbbs-logo.webp',
-        alt: 'NB Business Solutions',
-      },
-    ],
+      'Business diagnosis, clarity and practical implementation for MSME founders in Nashik. Diagnose before you prescribe.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'NB Business Solutions | Integrated MSME Business Solutions, Nashik',
     description:
-      'NB Business Solutions helps MSME founders identify what is holding their business back, create clarity on what needs attention, and implement practical business solutions for sustainable growth.',
-    images: ['/nbbs-logo.webp'],
+      'Business diagnosis, clarity and practical implementation for MSME founders in Nashik. Diagnose before you prescribe.',
   },
   robots: {
     index: true,
@@ -105,6 +87,27 @@ const organizationJsonLd = {
     addressCountry: 'IN',
   },
   areaServed: 'Nashik, Maharashtra, India',
+  geo: { '@type': 'GeoCoordinates', latitude: 20.0057655, longitude: 73.7690401 },
+  hasMap: 'https://www.google.com/maps/place/NB+Business+Solutions/@20.0057655,73.7690401,17z',
+  sameAs: [
+    'https://www.linkedin.com/in/nbakliwal/',
+    'https://www.instagram.com/nb.businesssolutions',
+  ],
+  subOrganization: [
+    { '@type': 'Organization', name: 'Business Clarity Workshop', url: 'https://workshop.nbbs.in' },
+    { '@type': 'Organization', name: 'The Business OPD', url: 'https://businessopd.nbbs.in' },
+    { '@type': 'Organization', name: 'Incentiwise', url: 'https://incentiwise.nbbs.in' },
+  ],
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'NB Business Solutions',
+  alternateName: 'NBBS',
+  url: siteUrl,
+  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: siteUrl },
+  inLanguage: 'en-IN',
 };
 
 import QueryProvider from '@/src/providers/QueryProvider';
@@ -124,6 +127,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
       <body

@@ -12,7 +12,7 @@ export default function AboutSection() {
   return (
     <section id="about">
       <ScrollReveal>
-        <Hero />
+        <Hero as="h2" />
         <Philosophy />
         <VideoTestimonials />
         <GoogleReview />

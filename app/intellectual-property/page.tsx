@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SITE_URL } from '@/src/const/site.const';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
       'How NBBS intellectual property, frameworks, and materials may and may not be used by clients.',
     url: '/intellectual-property',
     type: 'website',
+    images: ['/opengraph-image'],
   },
 };
 
@@ -22,20 +24,20 @@ const pageJsonLd = {
   name: 'Intellectual Property Policy',
   description:
     'How NBBS intellectual property, frameworks, and materials may and may not be used by clients.',
-  url: 'https://nbbs.in/intellectual-property',
+  url: `${SITE_URL}/intellectual-property`,
   datePublished: '2026-09-07',
   dateModified: '2026-09-07',
-  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: 'https://nbbs.in' },
-  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: SITE_URL },
+  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: SITE_URL },
   breadcrumb: {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://nbbs.in' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Intellectual Property',
-        item: 'https://nbbs.in/intellectual-property',
+        item: `${SITE_URL}/intellectual-property`,
       },
     ],
   },

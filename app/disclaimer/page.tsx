@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SITE_URL } from '@/src/const/site.const';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
       'Disclaimer covering the nature of NBBS consulting services, limitation of liability, and client responsibilities.',
     url: '/disclaimer',
     type: 'website',
+    images: ['/opengraph-image'],
   },
 };
 
@@ -22,16 +24,16 @@ const pageJsonLd = {
   name: 'Consulting Disclaimer & Limitation of Liability',
   description:
     'Disclaimer covering the nature of NBBS consulting services, limitation of liability, and client responsibilities.',
-  url: 'https://nbbs.in/disclaimer',
+  url: `${SITE_URL}/disclaimer`,
   datePublished: '2026-09-07',
   dateModified: '2026-09-07',
-  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: 'https://nbbs.in' },
-  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: SITE_URL },
+  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: SITE_URL },
   breadcrumb: {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://nbbs.in' },
-      { '@type': 'ListItem', position: 2, name: 'Disclaimer', item: 'https://nbbs.in/disclaimer' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Disclaimer', item: `${SITE_URL}/disclaimer` },
     ],
   },
 };

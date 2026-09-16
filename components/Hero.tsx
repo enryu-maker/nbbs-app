@@ -1,4 +1,6 @@
-export default function Hero() {
+// Rendered as the H1 on /about, and as an H2 inside the home page, where the
+// hero above it already owns the H1.
+export default function Hero({ as: Heading = 'h1' }: { as?: 'h1' | 'h2' }) {
   return (
     <section className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-16  pb-12 md:pt-16 md:pb-16 ">
       <div className="max-w-4xl reveal">
@@ -9,14 +11,14 @@ export default function Hero() {
             About NBBS
           </span>
         </div>
-        <h1
+        <Heading
           className="font-medium text-display text-primary leading-tight mb-8"
           style={{
             fontFamily: 'Bodoni Moda, serif',
           }}
         >
           We don’t just tell you what to do. We help you understand what needs to change and why.
-        </h1>
+        </Heading>
         {/* Description */}
         <p className="font-body-lg text-body-lg text-primary/50 max-w-2xl leading-relaxed mb-6">
           NB Business Solutions works with MSME leaders to bring clarity to complex business

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SITE_URL } from '@/src/const/site.const';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
       'How NBBS uses cookies and Google Analytics on this website, and your consent options.',
     url: '/cookie-policy',
     type: 'website',
+    images: ['/opengraph-image'],
   },
 };
 
@@ -22,20 +24,20 @@ const pageJsonLd = {
   name: 'Cookie & Analytics Policy',
   description:
     'How NBBS uses cookies and Google Analytics on this website, and your consent options.',
-  url: 'https://nbbs.in/cookie-policy',
+  url: `${SITE_URL}/cookie-policy`,
   datePublished: '2026-09-07',
   dateModified: '2026-09-07',
-  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: 'https://nbbs.in' },
-  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: 'https://nbbs.in' },
+  isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: SITE_URL },
+  publisher: { '@type': 'Organization', name: 'NB Business Solutions', url: SITE_URL },
   breadcrumb: {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://nbbs.in' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Cookie Policy',
-        item: 'https://nbbs.in/cookie-policy',
+        item: `${SITE_URL}/cookie-policy`,
       },
     ],
   },
