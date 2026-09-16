@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CaseStudyCard from '@/components/knowledge/CaseStudyCard';
-import { caseStudies } from '@/src/const/case-studies.const';
+import { getCaseStudies } from '@/src/apis';
 import { SITE_URL } from '@/src/const/site.const';
 
 export const metadata: Metadata = {
@@ -28,7 +28,11 @@ const pageJsonLd = {
   isPartOf: { '@type': 'WebSite', name: 'NB Business Solutions', url: SITE_URL },
 };
 
-export default function CaseStudiesPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function CaseStudiesPage() {
+  const caseStudies = await getCaseStudies();
+
   return (
     <>
       <script
@@ -57,6 +61,12 @@ export default function CaseStudiesPage() {
               <CaseStudyCard key={study.slug} study={study} />
             ))}
           </div>
+
+          {caseStudies.length === 0 && (
+            <p className="mt-14 text-[15px] text-[#141a32]/60">
+              Case studies are on their way. Check back shortly.
+            </p>
+          )}
 
           <div className="mt-16 rounded-2xl bg-[#141a32] px-8 py-10 text-center text-white sm:px-12">
             <p

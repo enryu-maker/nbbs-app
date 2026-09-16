@@ -1,22 +1,6 @@
 import type { ApiBlogPost, BlogPost } from '@/src/types';
 import { API_BASE_URL } from './client.api';
-
-function stripHtml(value: string): string {
-  return value
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'")
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function looksLikeHtml(value: string): boolean {
-  return /<\/?[a-z][\s\S]*>/i.test(value);
-}
+import { looksLikeHtml, stripHtml } from './html';
 
 function buildExcerpt(description: string): string {
   const plain = stripHtml(description);

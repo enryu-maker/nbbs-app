@@ -3,18 +3,21 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { caseStudies, getCaseStudyBySlug } from '@/src/const/case-studies.const';
+import { getCaseStudies, getCaseStudy } from '@/src/apis';
 import { SITE_URL } from '@/src/const/site.const';
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
+  const caseStudies = await getCaseStudies();
   return caseStudies.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const study = getCaseStudyBySlug(slug);
+  const study = await getCaseStudy(slug);
   if (!study) return { title: 'Case Study' };
 
   return {
@@ -32,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CaseStudyDetailPage({ params }: Props) {
   const { slug } = await params;
-  const study = getCaseStudyBySlug(slug);
+  const study = await getCaseStudy(slug);
   if (!study) notFound();
 
   const pageJsonLd = {
@@ -73,44 +76,68 @@ export default async function CaseStudyDetailPage({ params }: Props) {
             {study.founder}
           </p>
 
-          <div className="mt-12 grid grid-cols-3 gap-4 border-y border-[#141a32]/10 py-8">
-            {study.results.map((r) => (
-              <div key={r.label} className="text-center">
-                <p
-                  className="text-[28px] font-medium sm:text-[32px]"
-                  style={{ fontFamily: 'Bodoni Moda, serif' }}
-                >
-                  {r.value}
-                </p>
-                <p className="mt-1 text-[11px] leading-4 text-[#141a32]/50 sm:text-[12px]">
-                  {r.label}
-                </p>
-              </div>
-            ))}
-          </div>
+          {study.results.length > 0 && (
+            <div className="mt-12 grid grid-cols-2 gap-4 border-y border-[#141a32]/10 py-8 sm:grid-cols-3">
+              {study.results.map((r) => (
+                <div key={`${r.value}-${r.label}`} className="text-center">
+                  <p
+                    className="text-[28px] font-medium sm:text-[32px]"
+                    style={{ fontFamily: 'Bodoni Moda, serif' }}
+                  >
+                    {r.value}
+                  </p>
+                  <p className="mt-1 text-[11px] leading-4 text-[#141a32]/50 sm:text-[12px]">
+                    {r.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="mt-12 space-y-10 text-[15px] leading-7 text-[#141a32]/75">
             <section>
               <h2 className="mb-3 text-[12px] font-bold uppercase tracking-[0.18em] text-[#c0923e]">
                 Challenge
               </h2>
-              <p>{study.challenge}</p>
+              {study.challengeHtml ? (
+                <div
+                  className="space-y-4 [&_a]:underline [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: study.challengeHtml }}
+                />
+              ) : (
+                <p>{study.challenge}</p>
+              )}
             </section>
             <section>
               <h2 className="mb-3 text-[12px] font-bold uppercase tracking-[0.18em] text-[#c0923e]">
                 Solution
               </h2>
-              <p>{study.solution}</p>
+              {study.solutionHtml ? (
+                <div
+                  className="space-y-4 [&_a]:underline [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: study.solutionHtml }}
+                />
+              ) : (
+                <p>{study.solution}</p>
+              )}
             </section>
             <section>
               <h2 className="mb-3 text-[12px] font-bold uppercase tracking-[0.18em] text-[#c0923e]">
                 Approach
               </h2>
-              <p>{study.approach}</p>
+              {study.approachHtml ? (
+                <div
+                  className="space-y-4 [&_a]:underline [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: study.approachHtml }}
+                />
+              ) : (
+                <p>{study.approach}</p>
+              )}
             </section>
           </div>
 
-          <blockquote className="relative mt-12 rounded-2xl bg-[#141a32] p-8 text-white sm:p-10">
+          {study.quote && (
+            <blockquote className="relative mt-12 rounded-2xl bg-[#141a32] p-8 text-white sm:p-10">
             <p
               className="text-[22px] font-medium leading-snug sm:text-[26px]"
               style={{ fontFamily: 'Bodoni Moda, serif' }}
@@ -120,23 +147,8 @@ export default async function CaseStudyDetailPage({ params }: Props) {
             <footer className="mt-6 text-[12px] uppercase tracking-wider text-white/50">
               {study.founder}
             </footer>
-          </blockquote>
-
-          <div className="mt-10">
-            <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-[#141a32]/40">
-              Services used
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {study.servicesUsed.map((s) => (
-                <span
-                  key={s}
-                  className="rounded-full border border-[#141a32]/10 bg-white px-3 py-1.5 text-[12px] text-[#141a32]/70"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
+            </blockquote>
+          )}
 
           <div className="mt-14 text-center">
             <Link

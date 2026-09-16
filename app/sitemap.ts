@@ -1,13 +1,16 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL as siteUrl } from '@/src/const/site.const';
-import { caseStudies } from '@/src/const/case-studies.const';
-import { getBlogPosts, getCarousels } from '@/src/apis';
+import { getBlogPosts, getCarousels, getCaseStudies } from '@/src/apis';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = ['', '/about', '/services', '/faq', '/carousel', '/blog', '/case-studies'];
   const legalRoutes = ['/privacy', '/disclaimer', '/intellectual-property', '/cookie-policy'];
 
-  const [blogPosts, carousels] = await Promise.all([getBlogPosts(), getCarousels()]);
+  const [blogPosts, carousels, caseStudies] = await Promise.all([
+    getBlogPosts(),
+    getCarousels(),
+    getCaseStudies(),
+  ]);
 
   const knowledgeDetailRoutes = [
     ...carousels.map((c) => `/carousel/${c.slug}`),

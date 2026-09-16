@@ -6,3 +6,4 @@ export const VISITORS_ENDPOINT = '/api/nbbs/visitors/';
 export const BLOG_ENDPOINT = '/api/nbbs/blog/';
 export const CONTACT_US_ENDPOINT = '/api/nbbs/contact-us/';
 export const CAROUSELS_ENDPOINT = '/api/nbbs/carousels/';
+export const CASE_STUDIES_ENDPOINT = '/api/nbbs/case-studies/';

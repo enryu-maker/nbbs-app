@@ -8,3 +8,5 @@ export * from './blog.normalize';
 export * from './contact.api';
 export * from './carousel.api';
 export * from './carousel.normalize';
+export * from './html';
+export * from './caseStudies.api';

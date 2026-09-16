@@ -5,3 +5,4 @@ export * from './service.types';
 export * from './blog.types';
 export * from './contact.types';
 export * from './carousel.types';
+export * from './case-study.types';

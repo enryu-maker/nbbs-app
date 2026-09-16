@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { CaseStudy } from '@/src/const/case-studies.const';
+import type { CaseStudy } from '@/src/types';
 
 export default function CaseStudyCard({ study }: { study: CaseStudy }) {
   const highlight = study.results[0];
