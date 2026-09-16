@@ -3,3 +3,8 @@ export * from './industries.api';
 export * from './anchorCustomers.api';
 export * from './credibility.api';
 export * from './services.api';
+export * from './blog.api';
+export * from './blog.normalize';
+export * from './contact.api';
+export * from './carousel.api';
+export * from './carousel.normalize';

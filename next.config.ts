@@ -16,8 +16,14 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
+        protocol: 'http',
+        hostname: 'erp.nbbs.in',
+        pathname: '/**',
+      },
+      {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'erp.nbbs.in',
+        pathname: '/**',
       },
     ],
   },

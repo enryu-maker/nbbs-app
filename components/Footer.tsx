@@ -245,6 +245,10 @@ export default function Footer() {
             <span>© 2026 NB Business Solutions, Nashik.</span>
 
             <div className="flex flex-wrap gap-3">
+              <Link href="/privacy" className="transition-colors hover:text-white">
+                Privacy
+              </Link>
+
               <Link href="/disclaimer" className="transition-colors hover:text-white">
                 Disclaimer
               </Link>

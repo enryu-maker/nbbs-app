@@ -6,3 +6,4 @@ export * from './industries.const';
 export * from './stats.const';
 export * from './site.const';
 export * from './faq.const';
+export * from './case-studies.const';

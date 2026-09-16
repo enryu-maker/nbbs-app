@@ -3,3 +3,6 @@ export const ANCHOR_CUSTOMERS_ENDPOINT = '/api/nbbs/anchor-customers/';
 export const CREDIBILITY_ENDPOINT = '/api/nbbs/credibility/';
 export const SERVICES_ENDPOINT = '/api/nbbs/services/';
 export const VISITORS_ENDPOINT = '/api/nbbs/visitors/';
+export const BLOG_ENDPOINT = '/api/nbbs/blog/';
+export const CONTACT_US_ENDPOINT = '/api/nbbs/contact-us/';
+export const CAROUSELS_ENDPOINT = '/api/nbbs/carousels/';
