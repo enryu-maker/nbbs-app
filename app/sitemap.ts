@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://nbbs.in').replace(/\/$/, '');
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ['', '/about', '/services', '/contacts'];
+  const routes = ['', '/about', '/services'];
   const legalRoutes = ['/disclaimer', '/intellectual-property', '/cookie-policy'];
 
   return [

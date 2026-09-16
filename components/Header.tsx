@@ -6,8 +6,30 @@ import { usePathname } from 'next/navigation';
 import { Link as ScrollLink } from 'react-scroll';
 import { useState } from 'react';
 
+type NavItem = {
+  label: string;
+  href?: string;
+  // Home-page section id: scrolls when we're on '/', links to the hash otherwise.
+  scrollTo?: string;
+  children?: { label: string; href: string }[];
+};
+
+const navItems: NavItem[] = [
+  { label: 'About Us', scrollTo: 'about' },
+  { label: 'Services', scrollTo: 'services' },
+  {
+    label: 'Knowledge Hub',
+    children: [
+      { label: 'Carousel', href: '/carousel' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Case Studies', href: '/case-studies' },
+    ],
+  },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact Us', scrollTo: 'contact' },
+];
+
 export default function Header() {
-  const [active, setActive] = useState('navItems');
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const onHome = pathname === '/';
@@ -18,7 +40,6 @@ export default function Header() {
         {/* Logo */}
         {onHome ? (
           <ScrollLink
-            onClick={() => setActive('home')}
             smooth={true}
             duration={700}
             offset={-80}
@@ -58,78 +79,53 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          {onHome ? (
-            <>
-              <ScrollLink
-                to="services"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                onClick={() => setActive('service')}
-                className={`relative text-[14px] font-medium text-primary cursor-pointer transition-colors duration-300 hover:text-secondary ${active === 'service' ? 'text-secondary underline underline-offset-4' : 'text-primary hover:text-secondary'}`}
-              >
-                Services
-              </ScrollLink>
+          {navItems.map((item) =>
+            item.children ? (
+              <div key={item.label} className="relative group">
+                <button
+                  type="button"
+                  className="flex items-center gap-1 text-[14px] font-medium text-primary transition-colors duration-300 hover:text-secondary"
+                >
+                  {item.label}
+                  <span className="material-symbols-outlined text-[18px]">expand_more</span>
+                </button>
 
+                <div className="invisible absolute left-0 top-full w-48 rounded-xl border border-[#e5e5e5] bg-white py-2 opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      className="block px-4 py-2 text-[14px] font-medium text-primary transition-colors hover:text-secondary"
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : item.scrollTo && onHome ? (
               <ScrollLink
-                to="about"
+                key={item.label}
+                to={item.scrollTo}
                 smooth={true}
                 duration={700}
                 offset={-80}
-                onClick={() => setActive('about')}
-                className={`relative text-[14px] font-medium text-primary cursor-pointer transition-colors duration-300 hover:text-secondary ${active === 'about' ? 'text-secondary underline underline-offset-4' : 'text-primary hover:text-secondary'}`}
+                className="cursor-pointer text-[14px] font-medium text-primary transition-colors duration-300 hover:text-secondary"
               >
-                About Us
+                {item.label}
               </ScrollLink>
-
-              <ScrollLink
-                to="vision"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                onClick={() => setActive('vision')}
-                className={`relative text-[14px] font-medium text-primary cursor-pointer transition-colors duration-300 hover:text-secondary ${active === 'vision' ? 'text-secondary underline underline-offset-4' : 'text-primary hover:text-secondary'}`}
-              >
-                Vision
-              </ScrollLink>
-              <ScrollLink
-                to="vision"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                onClick={() => setActive('mission')}
-                className={`relative text-[14px] font-medium text-primary cursor-pointer transition-colors duration-300 hover:text-secondary ${active === 'mission' ? 'text-secondary underline underline-offset-4' : 'text-primary hover:text-secondary'}`}
-              >
-                Mission
-              </ScrollLink>
-            </>
-          ) : (
-            <>
+            ) : (
               <Link
-                href="/#services"
-                className="relative text-[14px] font-medium text-primary transition-colors duration-300 hover:text-secondary"
+                key={item.label}
+                href={item.href ?? `/#${item.scrollTo}`}
+                className={`text-[14px] font-medium transition-colors duration-300 hover:text-secondary ${
+                  pathname === item.href
+                    ? 'text-secondary underline underline-offset-4'
+                    : 'text-primary'
+                }`}
               >
-                Services
+                {item.label}
               </Link>
-              <Link
-                href="/#about"
-                className="relative text-[14px] font-medium text-primary transition-colors duration-300 hover:text-secondary"
-              >
-                About Us
-              </Link>
-              <Link
-                href="/#vision"
-                className="relative text-[14px] font-medium text-primary transition-colors duration-300 hover:text-secondary"
-              >
-                Vision
-              </Link>
-              <Link
-                href="/#vision"
-                className="relative text-[14px] font-medium text-primary transition-colors duration-300 hover:text-secondary"
-              >
-                Mission
-              </Link>
-            </>
+            ),
           )}
         </nav>
 
@@ -153,71 +149,43 @@ export default function Header() {
         }`}
       >
         <nav className="px-5 py-5 flex flex-col gap-2">
-          {onHome ? (
-            <>
+          {navItems.map((item) =>
+            item.children ? (
+              <div key={item.label} className="flex flex-col">
+                <span className="px-4 py-3 text-primary font-medium">{item.label}</span>
+                {item.children.map((child) => (
+                  <Link
+                    key={child.href}
+                    href={child.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="px-8 py-2 text-[14px] text-primary/80"
+                  >
+                    {child.label}
+                  </Link>
+                ))}
+              </div>
+            ) : item.scrollTo && onHome ? (
               <ScrollLink
-                to="services"
+                key={item.label}
+                to={item.scrollTo}
                 smooth={true}
                 duration={700}
                 offset={-80}
-                onClick={() => {
-                  setMenuOpen(false);
-                }}
-                className="px-4 py-3 text-primary cursor-pointer"
+                onClick={() => setMenuOpen(false)}
+                className="cursor-pointer px-4 py-3 text-primary"
               >
-                Services
+                {item.label}
               </ScrollLink>
-
-              <ScrollLink
-                to="about"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                onClick={() => {
-                  setMenuOpen(false);
-                }}
-                className="px-4 py-3 text-primary cursor-pointer"
-              >
-                About Us
-              </ScrollLink>
-
-              <ScrollLink
-                to="contact"
-                smooth={true}
-                duration={700}
-                offset={-80}
-                onClick={() => {
-                  setMenuOpen(false);
-                }}
-                className="px-4 py-3 text-primary cursor-pointer"
-              >
-                Contact
-              </ScrollLink>
-            </>
-          ) : (
-            <>
+            ) : (
               <Link
-                href="/#services"
+                key={item.label}
+                href={item.href ?? `/#${item.scrollTo}`}
                 onClick={() => setMenuOpen(false)}
                 className="px-4 py-3 text-primary"
               >
-                Services
+                {item.label}
               </Link>
-              <Link
-                href="/#about"
-                onClick={() => setMenuOpen(false)}
-                className="px-4 py-3 text-primary"
-              >
-                About Us
-              </Link>
-              <Link
-                href="/#contact"
-                onClick={() => setMenuOpen(false)}
-                className="px-4 py-3 text-primary"
-              >
-                Contact
-              </Link>
-            </>
+            ),
           )}
         </nav>
       </div>

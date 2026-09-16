@@ -226,7 +226,7 @@ export default function ServicesPage() {
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 w-full sm:w-auto">
                 <Link
-                  href="/contacts"
+                  href="/#contact"
                   className="bg-[#ffdea5] text-[#261900] text-[11px] sm:text-[12px] leading-none rounded-xl tracking-widest font-bold uppercase px-6 py-3.5 sm:py-4 hover:bg-[#e9c176] transition-colors flex items-center justify-center gap-2 group"
                 >
                   EXPLORE The Business OPD™
@@ -379,7 +379,7 @@ export default function ServicesPage() {
                             </div>
 
                             <Link
-                              href="/contacts"
+                              href="/#contact"
                               className="
                               mt-7
                               sm:mt-10
@@ -765,7 +765,7 @@ export default function ServicesPage() {
               </p>
 
               <Link
-                href="/contacts"
+                href="/#contact"
                 className="
                   bg-[#141A32]
                   text-white

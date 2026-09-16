@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import ContactForm from '@/components/ContactForm';
 export default function ContactSection() {
   return (
     <section id="contact" className="bg-[#fbf9f8] text-[#141a32]">
@@ -267,6 +268,8 @@ export default function ContactSection() {
               </div>
             </div>
           </div>
+
+          <ContactForm />
         </div>
       </div>
     </section>
