@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
       { label: 'Case Studies', href: '/case-studies' },
     ],
   },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'FAQs', href: '/faq' },
   { label: 'Contact Us', scrollTo: 'contact' },
 ];
 
