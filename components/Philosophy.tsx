@@ -64,25 +64,55 @@ export default function Philosophy() {
           {principles.map((p) => (
             <div
               key={p.number}
-              className={`group flex flex-col border-r border-b border-surface/15 px-5 py-6 sm:px-6 sm:py-7 lg:px-3.5 lg:py-6 xl:px-5 xl:py-7 2xl:px-6 2xl:py-8 transition-colors duration-300 hover:bg-secondary/5 ${
+              className={`group border-r border-b border-surface/15 sm:[perspective:1200px] ${
                 p.number === '05' ? 'sm:col-span-2 lg:col-span-1' : ''
               }`}
             >
-              <span className="block text-[10px] font-bold tracking-[0.15em] text-surface/40">
-                {p.number}
-              </span>
+              {/* Mobile: static stacked card, no hover available so description stays visible */}
+              <div className="flex flex-col px-5 py-6 sm:hidden">
+                <span className="block text-[10px] font-bold tracking-[0.15em] text-surface/40">
+                  {p.number}
+                </span>
+                <h3 className="font-display tracking-[0.02em] break-words text-[22px] text-surface mt-3 mb-2 leading-tight">
+                  {p.title}
+                </h3>
+                <p className="font-body-md font-semibold text-surface-variant text-[15px] leading-snug mb-2">
+                  {p.tagline}
+                </p>
+                <p className="font-body-md text-surface-variant text-[12.5px] leading-relaxed opacity-80">
+                  {p.description}
+                </p>
+              </div>
 
-              <h3 className="font-display tracking-[0.02em] break-words text-[22px] sm:text-[24px] lg:text-[14.5px] xl:text-[18px] 2xl:text-[22px] min-[1800px]:text-[26px] text-surface mt-3 sm:mt-4 mb-2 leading-tight">
-                {p.title}
-              </h3>
+              {/* sm+: flip card on hover */}
+              <div className="relative hidden h-full min-h-[260px] transition-transform duration-500 sm:block sm:[transform-style:preserve-3d] group-hover:sm:[transform:rotateY(180deg)]">
+                {/* Front */}
+                <div className="sm:absolute sm:inset-0 flex flex-col justify-between px-6 py-7 lg:px-3.5 lg:py-6 xl:px-5 xl:py-7 2xl:px-6 2xl:py-8 sm:[backface-visibility:hidden]">
+                  <span className="block text-[10px] font-bold tracking-[0.15em] text-surface/40">
+                    {p.number}
+                  </span>
 
-              <p className="font-body-md font-semibold text-surface-variant text-[15px] sm:text-[16px] lg:text-[12.5px] xl:text-[14px] 2xl:text-[16px] min-[1800px]:text-[18px] leading-snug mb-2 sm:mb-2.5">
-                {p.tagline}
-              </p>
+                  <div>
+                    <h3 className="font-display tracking-[0.02em] break-words text-[24px] lg:text-[14.5px] xl:text-[18px] 2xl:text-[22px] min-[1800px]:text-[26px] text-surface mb-2 leading-tight">
+                      {p.title}
+                    </h3>
 
-              <p className="font-body-md text-surface-variant text-[12.5px] sm:text-[13px] lg:text-[10.5px] xl:text-[11.5px] 2xl:text-[13px] min-[1800px]:text-[14.5px] leading-relaxed opacity-80">
-                {p.description}
-              </p>
+                    <p className="font-body-md font-semibold text-surface-variant text-[16px] lg:text-[12.5px] xl:text-[14px] 2xl:text-[16px] min-[1800px]:text-[18px] leading-snug">
+                      {p.tagline}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Back */}
+                <div className="sm:absolute sm:inset-0 flex flex-col justify-center bg-secondary/10 px-6 py-7 lg:px-3.5 lg:py-6 xl:px-5 xl:py-7 2xl:px-6 2xl:py-8 sm:[backface-visibility:hidden] sm:[transform:rotateY(180deg)]">
+                  <h3 className="font-display tracking-[0.02em] break-words text-[20px] lg:text-[13px] xl:text-[15px] 2xl:text-[18px] text-surface mb-2 leading-tight">
+                    {p.title}
+                  </h3>
+                  <p className="font-body-md text-surface-variant text-[13px] lg:text-[10.5px] xl:text-[11.5px] 2xl:text-[13px] min-[1800px]:text-[14.5px] leading-relaxed opacity-90">
+                    {p.description}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
