@@ -2,63 +2,68 @@
 // snippets, and every fact here is already stated elsewhere on the site.
 export const faqs = [
   {
-    question: 'What is The Business OPD™?',
+    question: 'What is NB Business Solutions (NBBS)?',
     answer:
-      'The Business OPD™ is a focused 90-minute business diagnostic. Instead of treating symptoms, NBBS looks at how your business actually runs, finds where things break down, and gives you a prescription roadmap for what to fix first. It starts with a structured 30-minute discovery call and carries zero sales pressure.',
+      'NB Business Solutions (NBBS) is a business consulting and strategic management firm for MSMEs. NBBS helps founders understand business challenges, identify bottlenecks, improve processes, strengthen execution, and create clearer strategic direction.',
   },
   {
-    question: 'What does NB Business Solutions do?',
+    question: 'What does NBBS do?',
     answer:
-      'NB Business Solutions (NBBS) is a business consulting firm in Nashik, Maharashtra that works with MSME founders. We diagnose what is holding a business back, create clarity on what needs attention first, and then help implement practical systems for operations, sales, cashflow and incentives.',
+      'NBBS helps MSMEs work through the challenges that come between strategy and execution. This can include business diagnosis, strategic direction, process redesign, execution support, and systems for better performance. The starting point is always understanding the business and its real challenge before deciding what to do.',
   },
   {
-    question: 'What is the 8-Pillar Business Clarity Diagnostic?',
+    question: 'Who does NBBS work with?',
     answer:
-      'It is the framework behind the Business Clarity Workshop. Across eight pillars of the business, founders assess where the company genuinely stands today, which pillar is the biggest constraint on growth, and what deserves attention next. Every participant leaves with a personalised clarity report.',
+      'NBBS primarily works with MSME founders and entrepreneurs. We work with businesses seeking greater clarity, stronger execution, better systems, or a more structured path to sustainable growth.',
   },
   {
-    question: 'How much does the Business Clarity Workshop cost?',
+    question: 'How is NBBS different from a traditional business consultant?',
     answer:
-      'The Business Clarity Workshop is ₹2,499, inclusive of all taxes and materials. That covers the three-hour interactive workshop, the 8-Pillar Business Clarity Diagnostic report, the growth frameworks and decision tools used on the day, and a clear set of priorities for your next steps.',
+      'NBBS strategy is not a process that ends with a report or a recommendation. We focus on the gap between planning and execution, understanding the real problem, developing practical strategic direction and supporting implementation where necessary.',
   },
   {
-    question: 'How long is the Business Clarity Workshop?',
+    question: 'How does NBBS identify the real business problem?',
     answer:
-      'Three hours, run as an interactive session rather than a lecture. Founders work through practical business frameworks and the 8-Pillar Business Health Diagnostic on their own business, so the output is specific to their company rather than generic training material.',
+      'We start by understanding the business, its current situation, processes, challenges, and priorities. This helps us look beyond the visible symptoms and identify the issues that may actually be creating the bottleneck. This is the thinking behind our principle: Diagnosis before action.',
   },
   {
-    question: 'Who is NBBS for?',
+    question: "Can I approach NBBS if I don't know exactly what my business problem is?",
     answer:
-      'NBBS works with MSME and SMB owners — typically founders who can feel something is off in the business but cannot pinpoint where to start. If you are weighing consultants or software and want clarity before committing budget, the diagnostic is designed for exactly that moment.',
+      "Absolutely. You don't have to know exactly what's going wrong before you reach out. If you simply feel that something is holding the business back, that's a good place to start. We can first understand what's happening in the business, bring clarity to the real issue, and then decide what needs to be done.",
   },
   {
-    question: 'Do you work with businesses outside Nashik?',
+    question: 'Does NBBS support execution after developing a strategy?',
     answer:
-      'Yes. Our office is on College Road in Nashik, Maharashtra, and much of our work is with businesses across the region, but diagnostics and workshops are run for founders beyond the city as well. Call +91 9145789151 or email connect@nbbs.in to check availability.',
+      'Yes. We believe a strategy only creates value when it moves into action. Depending on what the business needs, NBBS can work alongside the team to put the strategy into practice — whether that means improving processes, setting up systems, tracking progress, or helping turn priorities into consistent execution.',
+  },
+  {
+    question: 'Can NBBS help redesign business processes?',
+    answer:
+      "Yes. Process redesign and improvement can form part of NBBS's strategic management and execution support. We look at how work currently happens, where bottlenecks or gaps exist, and what needs to change to create clearer, more practical, and sustainable ways of working.",
+  },
+  {
+    question: 'What is the Business Clarity Workshop?',
+    answer:
+      'The Business Clarity Workshop is a structured workshop by NBBS that gives founders the space to step back from the day-to-day and look at their business as a whole. It helps identify gaps, bottlenecks, and areas that need attention, so founders can get clearer on where the business stands and what needs to happen next. Because growth starts with clarity.',
+  },
+  {
+    question: 'What is Business OPD™?',
+    answer:
+      'Business OPD™ is a 60- to 90-minute business diagnosis and clarity consultation for entrepreneurs. It is designed to examine a specific business situation, identify the real problems or bottlenecks, and provide clear, actionable next steps. It follows the NBBS approach of diagnosis before action.',
   },
   {
     question: 'What is Incentiwise?',
     answer:
-      'Incentiwise is the NBBS solution for managing sales and channel incentive schemes. It replaces spreadsheet-based schemes with structured tracking, so payouts are calculated consistently, teams can see what they have earned, and management knows what each scheme actually costs.',
+      'Incentiwise is a performance and incentive management platform built to make performance tracking and incentives simpler for businesses. It brings goals, performance, and incentive rules into one structured platform so businesses can spend less time on manual calculations and more time focusing on performance.',
   },
   {
-    question: 'How is NBBS different from a traditional consultant?',
+    question: 'How do I know whether NBBS is the right fit for my business?',
     answer:
-      'Diagnosis before prescription. Most consulting starts with a recommendation; we start by understanding how the business runs today. We also stay through implementation rather than handing over a report, connecting strategy to the systems that make it stick.',
+      "If you feel your business needs more clarity, better processes, stronger execution, or a clearer direction for growth, it may be worth having a conversation with us. You don't need to have everything figured out before reaching out. Tell us what's happening in your business, and we can understand the situation together and identify the right way forward.",
   },
   {
-    question: 'How do I book a business diagnostic?',
+    question: 'How can I get in touch with NBBS?',
     answer:
-      'Start with the enquiry form on our contact section, or call +91 9145789151 directly. The first step is a structured 30-minute discovery call to understand your situation and confirm whether a Business OPD™ is the right next step for you.',
-  },
-  {
-    question: 'What happens after the diagnostic?',
-    answer:
-      'You get a prescription roadmap naming the priorities in order. From there you can implement it yourself, or NBBS can help put the relevant solutions in place — CRM, quotation, cashflow or incentive systems — following the diagnose, design, implement sequence.',
-  },
-  {
-    question: 'How experienced is the NBBS team?',
-    answer:
-      'NBBS brings over 20 years of business experience and has delivered 50+ diagnostics across Nashik. That work combines strategic thinking with practical frameworks, which is why our recommendations are built around what a growing business can realistically execute.',
+      "You can reach out to us through our Contact Us form, call us at +91 9145789151, or email us at connect@nbbs.in. Share a little about your business and what you're looking to address, and our team will get in touch to understand your requirements and guide you on the next step.",
   },
 ] as const;
