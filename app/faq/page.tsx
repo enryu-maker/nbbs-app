@@ -64,12 +64,6 @@ export default function FaqPage() {
           >
             Questions founders ask us
           </h1>
-
-          <p className="mt-5 text-[15px] leading-7 text-[#141a32]/70">
-            What the Business OPD™ covers, what the Business Clarity Workshop costs, and how we work
-            with MSME founders in Nashik and beyond.
-          </p>
-
           <div className="mt-12 divide-y divide-[#141a32]/10 border-t border-[#141a32]/10">
             {faqs.map((faq) => (
               <details key={faq.question} className="group py-6">
