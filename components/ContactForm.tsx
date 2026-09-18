@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { isApiError, submitContactUs } from '@/src/apis';
 import type { ContactUsPayload } from '@/src/types';
@@ -11,7 +11,6 @@ const FIELDS = [
   { name: 'phone', label: 'Phone', type: 'tel', required: true },
   { name: 'business_name', label: 'Business Name', type: 'text', required: true },
   { name: 'city', label: 'City', type: 'text', required: false },
-  { name: 'subject', label: 'Subject', type: 'text', required: true },
 ] as const;
 
 const SELECTS = [
@@ -51,15 +50,22 @@ type Status = 'idle' | 'submitting' | 'success' | 'error';
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 5000);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('submitting');
-    setErrorMessage('');
+    setToast(null);
 
     const form = e.currentTarget;
     const data = new FormData(form);
+    const message = String(data.get('message') || '').trim();
 
     const payload: ContactUsPayload = {
       name: String(data.get('name') || '').trim(),
@@ -69,21 +75,24 @@ export default function ContactForm() {
       business_sector: String(data.get('business_sector') || '').trim(),
       source_by: String(data.get('source_by') || '').trim(),
       city: String(data.get('city') || '').trim(),
-      subject: String(data.get('subject') || '').trim(),
-      message: String(data.get('message') || '').trim(),
+      subject: message.slice(0, 80),
+      message,
     };
 
     try {
       await submitContactUs(payload);
       setStatus('success');
+      setToast({
+        type: 'success',
+        message: "Thanks — your message was sent. We'll get back to you shortly.",
+      });
       form.reset();
     } catch (error) {
+      const message = isApiError(error)
+        ? error.message
+        : 'Something went wrong. Please try again or email connect@nbbs.in.';
       setStatus('error');
-      setErrorMessage(
-        isApiError(error)
-          ? error.message
-          : 'Something went wrong. Please try again or email connect@nbbs.in.',
-      );
+      setToast({ type: 'error', message });
     }
   };
 
@@ -174,20 +183,20 @@ export default function ContactForm() {
             {status === 'submitting' ? 'Sending…' : 'Send Message'}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </button>
-
-          {status === 'success' && (
-            <p className="text-[13px] text-[#1B4D3E]" role="status">
-              Thanks — your message was sent. We&apos;ll get back to you shortly.
-            </p>
-          )}
-
-          {status === 'error' && (
-            <p className="text-[13px] text-[#a33b2b]" role="alert">
-              {errorMessage}
-            </p>
-          )}
         </div>
       </form>
+
+      {toast && (
+        <div
+          role={toast.type === 'error' ? 'alert' : 'status'}
+          aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
+          className={`animate-toast-in fixed bottom-6 right-6 z-50 max-w-sm rounded-xl px-5 py-4 text-[14px] text-white shadow-lg ${
+            toast.type === 'success' ? 'bg-[#1B4D3E]' : 'bg-[#a33b2b]'
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
     </div>
   );
 }
