@@ -1,4 +1,4 @@
-import { apiClient } from './client.api';
+import { apiClient, isNotFoundError } from './client.api';
 import { BLOG_ENDPOINT } from '@/src/const';
 import { type ApiBlogPost, type BlogPost, type PaginatedResponse } from '@/src/types';
 import { isBlogPostActive, normalizeBlogPost } from './blog.normalize';
@@ -26,7 +26,8 @@ export async function fetchBlogPosts(): Promise<ApiBlogPost[]> {
 export async function fetchBlogPost(id: number | string): Promise<ApiBlogPost | null> {
   try {
     return await apiClient<ApiBlogPost>(`${BLOG_ENDPOINT}${id}/`);
-  } catch {
+  } catch (error) {
+    if (!isNotFoundError(error)) throw error;
     const posts = await fetchBlogPosts();
     return posts.find((p) => String(p.id) === String(id)) ?? null;
   }
@@ -40,23 +41,15 @@ function sortNormalized(posts: BlogPost[]): BlogPost[] {
  * Active blog posts from the live API only.
  */
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  try {
-    const raw = await fetchBlogPosts();
-    return sortNormalized(raw.filter(isBlogPostActive).map(normalizeBlogPost));
-  } catch {
-    return [];
-  }
+  const raw = await fetchBlogPosts();
+  return sortNormalized(raw.filter(isBlogPostActive).map(normalizeBlogPost));
 }
 
 /**
  * Single active blog post by id. Inactive or missing posts return null.
  */
 export async function getBlogPost(idOrSlug: string): Promise<BlogPost | null> {
-  try {
-    const raw = await fetchBlogPost(idOrSlug);
-    if (!raw || !isBlogPostActive(raw)) return null;
-    return normalizeBlogPost(raw);
-  } catch {
-    return null;
-  }
+  const raw = await fetchBlogPost(idOrSlug);
+  if (!raw || !isBlogPostActive(raw)) return null;
+  return normalizeBlogPost(raw);
 }

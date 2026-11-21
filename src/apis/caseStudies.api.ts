@@ -1,4 +1,4 @@
-import { apiClient } from './client.api';
+import { apiClient, isNotFoundError } from './client.api';
 import { CASE_STUDIES_ENDPOINT } from '@/src/const';
 import { looksLikeHtml, stripHtml } from './html';
 import {
@@ -85,15 +85,11 @@ export async function fetchCaseStudies(): Promise<ApiCaseStudy[]> {
  * Active case studies, newest first.
  */
 export async function getCaseStudies(): Promise<CaseStudy[]> {
-  try {
-    const raw = await fetchCaseStudies();
-    return raw
-      .filter(isCaseStudyActive)
-      .map(normalizeCaseStudy)
-      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
-  } catch {
-    return [];
-  }
+  const raw = await fetchCaseStudies();
+  return raw
+    .filter(isCaseStudyActive)
+    .map(normalizeCaseStudy)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 /**
@@ -104,7 +100,8 @@ export async function getCaseStudy(idOrSlug: string): Promise<CaseStudy | null> 
     const raw = await apiClient<ApiCaseStudy>(`${CASE_STUDIES_ENDPOINT}${idOrSlug}/`);
     if (!raw || !isCaseStudyActive(raw)) return null;
     return normalizeCaseStudy(raw);
-  } catch {
+  } catch (error) {
+    if (!isNotFoundError(error)) throw error;
     const studies = await getCaseStudies();
     return studies.find((c) => c.slug === String(idOrSlug)) ?? null;
   }

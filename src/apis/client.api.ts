@@ -31,6 +31,15 @@ export class ApiError extends Error {
 }
 
 /**
+ * True only when the ERP answered 404. Any other failure (network, timeout, 5xx)
+ * must propagate: turning an outage into "not found" would serve 404s to Google
+ * and drop indexed pages.
+ */
+export function isNotFoundError(error: unknown): boolean {
+  return error instanceof ApiError && error.status === 404;
+}
+
+/**
  * Type guard to check if an unknown error is an instance of ApiError.
  */
 export function isApiError(error: unknown): error is ApiError {

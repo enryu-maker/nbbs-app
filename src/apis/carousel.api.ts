@@ -1,4 +1,4 @@
-import { apiClient } from './client.api';
+import { apiClient, isNotFoundError } from './client.api';
 import { CAROUSELS_ENDPOINT } from '@/src/const';
 import { type ApiCarousel, type Carousel, type PaginatedResponse } from '@/src/types';
 import { normalizeCarousel } from './carousel.normalize';
@@ -27,7 +27,8 @@ export async function fetchCarousels(): Promise<ApiCarousel[]> {
 export async function fetchCarousel(id: number | string): Promise<ApiCarousel | null> {
   try {
     return await apiClient<ApiCarousel>(`${CAROUSELS_ENDPOINT}${id}/`);
-  } catch {
+  } catch (error) {
+    if (!isNotFoundError(error)) throw error;
     const all = await fetchCarousels();
     return all.find((c) => String(c.id) === String(id)) ?? null;
   }
@@ -37,27 +38,19 @@ export async function fetchCarousel(id: number | string): Promise<ApiCarousel | 
  * Normalized carousels from the live API only.
  */
 export async function getCarousels(): Promise<Carousel[]> {
-  try {
-    const raw = await fetchCarousels();
-    return raw
-      .map(normalizeCarousel)
-      .filter((c) => c.images.length > 0)
-      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
-  } catch {
-    return [];
-  }
+  const raw = await fetchCarousels();
+  return raw
+    .map(normalizeCarousel)
+    .filter((c) => c.images.length > 0)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 /**
  * Single normalized carousel by id from the live API.
  */
 export async function getCarousel(idOrSlug: string): Promise<Carousel | null> {
-  try {
-    const raw = await fetchCarousel(idOrSlug);
-    if (!raw) return null;
-    const normalized = normalizeCarousel(raw);
-    return normalized.images.length > 0 ? normalized : null;
-  } catch {
-    return null;
-  }
+  const raw = await fetchCarousel(idOrSlug);
+  if (!raw) return null;
+  const normalized = normalizeCarousel(raw);
+  return normalized.images.length > 0 ? normalized : null;
 }
