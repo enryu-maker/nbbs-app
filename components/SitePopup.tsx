@@ -1,0 +1,148 @@
+"use client";
+
+// Announcement popup managed from the ERP (NBBS Website → Popups).
+// The ERP only returns popups that are active and inside their start/expiry window.
+import { useEffect, useState } from "react";
+
+type Cta = { label: string; color: string; url: string };
+type Popup = { id: number; text: string; text_color: string; bg_image: string; ctas: Cta[] };
+
+const API = "https://erp.nbbs.in/api/nbbs/popups/";
+const DISMISS_KEY = (id: number) => `nbbs-popup-dismissed-${id}`;
+
+function isDismissed(id: number) {
+  try {
+    return sessionStorage.getItem(DISMISS_KEY(id)) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export default function SitePopup({ site }: { site: "nbbs" | "workshop" | "opd" }) {
+  const [popup, setPopup] = useState<Popup | null>(null);
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+    fetch(`${API}?site=${site}`, { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list: Popup[]) => setPopup(list.find((p) => !isDismissed(p.id)) ?? null))
+      .catch(() => {});
+    return () => ctrl.abort();
+  }, [site]);
+
+  function close() {
+    if (!popup) return;
+    try {
+      sessionStorage.setItem(DISMISS_KEY(popup.id), "1");
+    } catch {}
+    setPopup(null);
+  }
+
+  useEffect(() => {
+    if (!popup) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  if (!popup) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Announcement"
+      onClick={close}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "grid",
+        placeItems: "center",
+        padding: 16,
+        background: "rgba(0,0,0,0.55)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: 440,
+          minHeight: 300,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          gap: 16,
+          padding: 24,
+          borderRadius: 16,
+          overflow: "hidden",
+          backgroundColor: "#111827",
+          backgroundImage: popup.bg_image ? `url("${popup.bg_image}")` : undefined,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+        }}
+      >
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Close"
+          autoFocus
+          style={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            width: 32,
+            height: 32,
+            border: 0,
+            borderRadius: 999,
+            background: "rgba(0,0,0,0.5)",
+            color: "#fff",
+            fontSize: 20,
+            lineHeight: 1,
+            cursor: "pointer",
+          }}
+        >
+          ×
+        </button>
+        {popup.text && (
+          <p
+            style={{
+              margin: 0,
+              whiteSpace: "pre-wrap",
+              color: popup.text_color,
+              fontSize: 20,
+              fontWeight: 600,
+              textShadow: "0 1px 3px rgba(0,0,0,0.5)",
+            }}
+          >
+            {popup.text}
+          </p>
+        )}
+        {popup.ctas.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {popup.ctas.map((cta) => (
+              <a
+                key={cta.label + cta.url}
+                href={cta.url}
+                onClick={close}
+                {...(cta.url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                style={{
+                  padding: "10px 18px",
+                  borderRadius: 10,
+                  background: cta.color,
+                  color: "#fff",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                {cta.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
