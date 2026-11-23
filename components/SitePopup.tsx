@@ -41,10 +41,43 @@ function isExternal(url: string) {
   }
 }
 
+// A visitor sent here by another NBBS site's popup has already seen one this visit.
+const ARRIVED_KEY = 'nbbs-popup-arrived-from-popup';
+
+function arrivedFromPopup() {
+  try {
+    if (new URLSearchParams(window.location.search).has('from_popup')) {
+      sessionStorage.setItem(ARRIVED_KEY, '1');
+    }
+    return sessionStorage.getItem(ARRIVED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+// Tag links to other sites: from_popup hides the popup there, utm_* (unless the
+// link already has its own) lets analytics count popup clicks.
+function trackedHref(url: string, site: string, id: number) {
+  if (!isExternal(url)) return url;
+  try {
+    const u = new URL(url, window.location.href);
+    u.searchParams.set('from_popup', site);
+    if (!u.searchParams.has('utm_source')) {
+      u.searchParams.set('utm_source', site);
+      u.searchParams.set('utm_medium', 'popup');
+      u.searchParams.set('utm_campaign', `popup-${id}`);
+    }
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 export default function SitePopup({ site }: { site: 'nbbs' | 'workshop' | 'opd' }) {
   const [popup, setPopup] = useState<Popup | null>(null);
 
   useEffect(() => {
+    if (arrivedFromPopup()) return;
     const ctrl = new AbortController();
     fetch(`${API}?site=${site}`, { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : []))
@@ -148,7 +181,7 @@ export default function SitePopup({ site }: { site: 'nbbs' | 'workshop' | 'opd' 
             {popup.ctas.map((cta) => (
               <a
                 key={cta.label + cta.url}
-                href={cta.url}
+                href={trackedHref(cta.url, site, popup.id)}
                 onClick={close}
                 {...(isExternal(cta.url) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 style={{
