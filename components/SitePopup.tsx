@@ -20,13 +20,13 @@ type Popup = {
 
 const API = 'https://erp.nbbs.in/api/nbbs/popups/';
 const DISMISS_KEY = (id: number) => `nbbs-popup-dismissed-${id}`;
-// localStorage (not sessionStorage) so a closed popup stays closed in other tabs;
-// keyed on updated_at so editing the popup in the ERP shows it again.
+// sessionStorage: a closed popup returns on the visitor's next visit. Keyed on
+// updated_at so editing the popup in the ERP shows it again within the visit.
 const version = (p: Popup) => p.updated_at || '1';
 
 function isDismissed(p: Popup) {
   try {
-    return localStorage.getItem(DISMISS_KEY(p.id)) === version(p);
+    return sessionStorage.getItem(DISMISS_KEY(p.id)) === version(p);
   } catch {
     return false;
   }
@@ -56,7 +56,7 @@ export default function SitePopup({ site }: { site: 'nbbs' | 'workshop' | 'opd' 
   function close() {
     if (!popup) return;
     try {
-      localStorage.setItem(DISMISS_KEY(popup.id), version(popup));
+      sessionStorage.setItem(DISMISS_KEY(popup.id), version(popup));
     } catch {}
     setPopup(null);
   }
