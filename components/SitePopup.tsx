@@ -1,31 +1,54 @@
-"use client";
+'use client';
 
 // Announcement popup managed from the ERP (NBBS Website → Popups).
 // The ERP only returns popups that are active and inside their start/expiry window.
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type Cta = { label: string; color: string; url: string };
-type Popup = { id: number; text: string; text_color: string; bg_image: string; ctas: Cta[] };
+type Popup = {
+  id: number;
+  text: string;
+  text_color: string;
+  bg_image: string;
+  ctas: Cta[];
+  // Older ERP responses lack these; the fallbacks are the original look.
+  bg_color?: string;
+  width?: number;
+  min_height?: number;
+  updated_at?: string;
+};
 
-const API = "https://erp.nbbs.in/api/nbbs/popups/";
+const API = 'https://erp.nbbs.in/api/nbbs/popups/';
 const DISMISS_KEY = (id: number) => `nbbs-popup-dismissed-${id}`;
+// localStorage (not sessionStorage) so a closed popup stays closed in other tabs;
+// keyed on updated_at so editing the popup in the ERP shows it again.
+const version = (p: Popup) => p.updated_at || '1';
 
-function isDismissed(id: number) {
+function isDismissed(p: Popup) {
   try {
-    return sessionStorage.getItem(DISMISS_KEY(id)) === "1";
+    return localStorage.getItem(DISMISS_KEY(p.id)) === version(p);
   } catch {
     return false;
   }
 }
 
-export default function SitePopup({ site }: { site: "nbbs" | "workshop" | "opd" }) {
+// Links to this same website stay in the tab; only other sites open a new one.
+function isExternal(url: string) {
+  try {
+    return new URL(url, window.location.href).origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
+export default function SitePopup({ site }: { site: 'nbbs' | 'workshop' | 'opd' }) {
   const [popup, setPopup] = useState<Popup | null>(null);
 
   useEffect(() => {
     const ctrl = new AbortController();
     fetch(`${API}?site=${site}`, { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : []))
-      .then((list: Popup[]) => setPopup(list.find((p) => !isDismissed(p.id)) ?? null))
+      .then((list: Popup[]) => setPopup(list.find((p) => !isDismissed(p)) ?? null))
       .catch(() => {});
     return () => ctrl.abort();
   }, [site]);
@@ -33,16 +56,16 @@ export default function SitePopup({ site }: { site: "nbbs" | "workshop" | "opd" 
   function close() {
     if (!popup) return;
     try {
-      sessionStorage.setItem(DISMISS_KEY(popup.id), "1");
+      localStorage.setItem(DISMISS_KEY(popup.id), version(popup));
     } catch {}
     setPopup(null);
   }
 
   useEffect(() => {
     if (!popup) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   });
 
   if (!popup) return null;
@@ -54,34 +77,34 @@ export default function SitePopup({ site }: { site: "nbbs" | "workshop" | "opd" 
       aria-label="Announcement"
       onClick={close}
       style={{
-        position: "fixed",
+        position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        display: "grid",
-        placeItems: "center",
+        display: 'grid',
+        placeItems: 'center',
         padding: 16,
-        background: "rgba(0,0,0,0.55)",
+        background: 'rgba(0,0,0,0.55)',
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: 440,
-          minHeight: 300,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
+          position: 'relative',
+          width: '100%',
+          maxWidth: popup.width || 440,
+          minHeight: popup.min_height || 300,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
           gap: 16,
           padding: 24,
           borderRadius: 16,
-          overflow: "hidden",
-          backgroundColor: "#111827",
+          overflow: 'hidden',
+          backgroundColor: popup.bg_color || '#111827',
           backgroundImage: popup.bg_image ? `url("${popup.bg_image}")` : undefined,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
         }}
       >
         <button
@@ -90,18 +113,18 @@ export default function SitePopup({ site }: { site: "nbbs" | "workshop" | "opd" 
           aria-label="Close"
           autoFocus
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 10,
             right: 10,
             width: 32,
             height: 32,
             border: 0,
             borderRadius: 999,
-            background: "rgba(0,0,0,0.5)",
-            color: "#fff",
+            background: 'rgba(0,0,0,0.5)',
+            color: '#fff',
             fontSize: 20,
             lineHeight: 1,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
         >
           ×
@@ -110,31 +133,31 @@ export default function SitePopup({ site }: { site: "nbbs" | "workshop" | "opd" 
           <p
             style={{
               margin: 0,
-              whiteSpace: "pre-wrap",
+              whiteSpace: 'pre-wrap',
               color: popup.text_color,
               fontSize: 20,
               fontWeight: 600,
-              textShadow: "0 1px 3px rgba(0,0,0,0.5)",
+              textShadow: '0 1px 3px rgba(0,0,0,0.5)',
             }}
           >
             {popup.text}
           </p>
         )}
         {popup.ctas.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {popup.ctas.map((cta) => (
               <a
                 key={cta.label + cta.url}
                 href={cta.url}
                 onClick={close}
-                {...(cta.url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(isExternal(cta.url) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 style={{
-                  padding: "10px 18px",
+                  padding: '10px 18px',
                   borderRadius: 10,
                   background: cta.color,
-                  color: "#fff",
+                  color: '#fff',
                   fontWeight: 600,
-                  textDecoration: "none",
+                  textDecoration: 'none',
                 }}
               >
                 {cta.label}
