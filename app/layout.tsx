@@ -64,6 +64,9 @@ export const metadata: Metadata = {
   verification: {
     google: 'pt7Rv_vUJ95GjDUa5KPZhQO4YzhpH5ae6bsMPzkICBY',
   },
+  other: {
+    designer: 'Nerdtech Softwares LLP - https://www.nerdtechsoftwares.com',
+  },
 };
 
 const organizationJsonLd = {

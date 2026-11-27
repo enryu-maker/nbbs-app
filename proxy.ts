@@ -14,6 +14,7 @@ const TIMEOUT_MS = 3000;
 const UP_TTL_MS = 30_000; // re-check a healthy ERP every 30s
 const DOWN_TTL_MS = 10_000; // re-check a failing ERP every 10s
 const RETRY_AFTER_S = 300;
+const DEVELOPED_BY = 'Nerdtech Softwares LLP - https://www.nerdtechsoftwares.com';
 
 // ponytail: per-process cache; each server instance checks on its own, which is fine for a few instances.
 let cached: { up: boolean; at: number } | null = null;
@@ -92,7 +93,11 @@ function maintenancePage(): string {
 }
 
 export async function proxy(request: NextRequest) {
-  if (await erpIsUp()) return NextResponse.next();
+  if (await erpIsUp()) {
+    const res = NextResponse.next();
+    res.headers.set('X-Developed-By', DEVELOPED_BY);
+    return res;
+  }
 
   const isPageRequest = (request.headers.get('accept') || '').includes('text/html');
   return new NextResponse(
@@ -103,6 +108,7 @@ export async function proxy(request: NextRequest) {
         'Content-Type': isPageRequest ? 'text/html; charset=utf-8' : 'application/json',
         'Retry-After': String(RETRY_AFTER_S),
         'Cache-Control': 'no-store, max-age=0',
+        'X-Developed-By': DEVELOPED_BY,
       },
     },
   );
